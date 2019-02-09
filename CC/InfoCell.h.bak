@@ -1,0 +1,16 @@
+#import "../Util.h"
+
+//@class MarqueeLabel;
+
+@interface InfoCell: UITableViewCell
+
+
+//@property (nonatomic) UIImageView *typeView;
+
+//@property (nonatomic) UILabel *titleLabel;
+
+//@property (nonatomic) UILabel *sizeLabel;
+
+
+
+@end

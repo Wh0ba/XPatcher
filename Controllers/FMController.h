@@ -1,0 +1,21 @@
+//#import "CC/InfoCell.h"
+#import "../CC/Bookmark.h"
+
+@protocol FMDelegate <NSObject>
+@optional
+- (void)setURL:(NSURL *)url forFieldTag:(int)tf;
+
+@end
+
+@interface FMController: UITableViewController <UIDocumentInteractionControllerDelegate>
+
+- (instancetype)initWithPath:(NSURL *)path;
+
+- (instancetype)initWithTarget:(int)target;
+- (instancetype)initWithPath:(NSURL *)path andBundleID:(NSString*)bid;
+
+@property (nonatomic, weak) id<FMDelegate> delegate;
+
+@end
+
+

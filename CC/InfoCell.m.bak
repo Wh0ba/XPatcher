@@ -1,0 +1,112 @@
+#import "InfoCell.h"
+
+#define kSizeDefPos 80
+#define kTitleDefPos 45
+
+
+@implementation InfoCell
+
+@synthesize titleLabel, sizeLabel, typeView;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+	
+	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+	
+	
+	
+	if (self) {
+		
+		
+		//[self setupLabels];
+		
+		
+		
+		
+	}
+	
+	//init
+	return self;
+}
+
+- (void)setupLabels {
+	
+	
+	
+	typeView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, (kTitleDefPos - 10), (SFS.height - 10))];
+	typeView.backgroundColor = [UIColor clearColor];
+	
+	
+	
+	[self addSubview:typeView];
+		
+	/////////////////////////////
+	
+	titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTitleDefPos, 10, (SFS.width - kSizeDefPos), 25)];
+	//titleLabel.text = @"Title";
+	titleLabel.textColor = [UIColor colorFromHexString:@"#FF6000"];
+	
+	[self addSubview:titleLabel];	
+	
+	////////////////////////////
+	
+	sizeLabel = [[UILabel alloc] initWithFrame:CGRectMake((SFS.width - kSizeDefPos), 10, kSizeDefPos, 25)];
+	//sizeLabel.text = @"";
+	sizeLabel.font = SFOS(12);
+	
+	sizeLabel.textColor = [UIColor colorFromHexString:@"#FF6000"];
+	
+	[self addSubview:sizeLabel];
+	
+	
+	
+	//[self setupConstraints];
+	
+	
+}
+
+
+- (void)setupConstraints {
+	typeView.translatesAutoresizingMaskIntoConstraints = false;
+	titleLabel.translatesAutoresizingMaskIntoConstraints = false;
+	sizeLabel.translatesAutoresizingMaskIntoConstraints = false;
+	
+	
+	
+	////size label
+	
+	
+	[NSLayoutConstraint constraintWithItem:sizeLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:5].active = true;
+	[NSLayoutConstraint constraintWithItem:sizeLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:sizeLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0f constant:-5].active = true;
+	[NSLayoutConstraint constraintWithItem:sizeLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:10].active = true;
+	
+	
+	///Title label 
+	
+	[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:typeView attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:5].active = true;
+	[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:sizeLabel attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0].active = true;
+	[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:10].active = true;
+	
+	
+	
+	//typeView 
+	[NSLayoutConstraint constraintWithItem:typeView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeading multiplier:1.0f constant:5].active = true;
+	[NSLayoutConstraint constraintWithItem:typeView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:typeView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0f constant:-5].active = true;
+	[NSLayoutConstraint constraintWithItem:typeView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:5].active = true;
+	
+	
+	
+	
+	
+	
+}
+
+
+
+
+@end

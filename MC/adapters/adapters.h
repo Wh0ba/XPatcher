@@ -1,0 +1,6 @@
+#import "BPSAdapter.h"
+#import "IPSAdapter.h"
+#import "MPPatchResult.h"
+#import "PPFAdapter.h"
+#import "RUPAdapter.h"
+#import "UPSAdapter.h"
