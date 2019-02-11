@@ -4,3 +4,4 @@
 #import "PPFAdapter.h"
 #import "RUPAdapter.h"
 #import "UPSAdapter.h"
+#import "XDeltaAdapter.h"

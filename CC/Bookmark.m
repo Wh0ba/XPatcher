@@ -1,5 +1,5 @@
 #import "Bookmark.h"
-#import "../shared.h"
+#import "../Headers/LSApplicationProxy.h"
 
 
 @implementation Bookmark

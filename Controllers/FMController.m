@@ -21,6 +21,7 @@ static NSString *CellIdentifier = @"Cell";
 @property (nonatomic, assign) BOOL showHiddenFiles;
 @property (nonatomic, assign) BOOL inAppDir;
 @property (nonatomic, assign) NSString *appBundleID;
+@property (nonatomic, assign) BOOL allowDeletingFromApps;
 
 @end
 
@@ -36,7 +37,7 @@ static NSString *CellIdentifier = @"Cell";
 	Avatar *kora;
 	
 }
-@synthesize exCall, currentURL, showHiddenFiles;
+@synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
 
 
 
@@ -52,7 +53,7 @@ static NSString *CellIdentifier = @"Cell";
 	kora = [Avatar shared];
 	
 	showHiddenFiles = NO;
-	
+	allowDeletingFromApps = NO;
 	
 	//self.tableView.allowEditing = NO;
 	
@@ -86,22 +87,10 @@ static NSString *CellIdentifier = @"Cell";
 	
 }
 
-- (void)navBarMagic {
-	
-	self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
-	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-	self.navigationController.navigationBar.translucent = NO;
-	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-	
-	[[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 
-	[[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-	
-	
-}
 
+#pragma mark -
+#pragma mark Initilizers
 
 - (instancetype)initWithTarget:(int)tar {
 	
@@ -155,37 +144,62 @@ static NSString *CellIdentifier = @"Cell";
 	return self;
 }
 
-- (void)setNav {
+
+
+#pragma mark -
+#pragma mark LoadContent
+
+
+- (void)loadContent {
+	
+	NSUInteger flag = showHiddenFiles ? 0 : NSDirectoryEnumerationSkipsHiddenFiles;
 	
 	
 	
-	UIBarButtonItem *addFav = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(buttonActions:)];
-	addFav.tag = 2;
 	
-	self.navigationItem.rightBarButtonItem = addFav;
+	NSArray *dirURLs = @[];
 	
-	//UIBarButtonSystemItemSave
+	if (exCall) {
+		NSError *err;
+		
+		//check if the directory doesn't exist
+		if (!currentURL || ![fileManager fileExistsAtPath:currentURL.path isDirectory:nil]) {
+			[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"Folder doesn't exsist"]];
+			
+			dirURLs = @[];
+			
+			[self.navigationController popViewControllerAnimated:YES];
+			
+			
+		}else {
+			dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
+			
+			if (err) {
+				[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
+			}
+		}
+	}else {
+		
+		currentURL = kora.documentsDirectory;
+		NSError *err;
+		dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
+		
+		
+		if (err) {
+			[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
+		}
+	}
 	
+	
+	self.title = [currentURL lastPathComponent];
+	
+	dirCon = [dirURLs mutableCopy];
+	
+	[dirCon sortUsingComparator:^NSComparisonResult(NSURL* a, NSURL* b) {
+		return [a.path caseInsensitiveCompare:b.path];
+	}];;
 }
 
-- (void)buttonActions:(id)sender {
-	
-	int tg = [sender tag];
-	
-	switch (tg) {
-		case 1:
-			[self dismissViewControllerAnimated:YES completion:nil];
-			break; 
-		case 2: 
-			
-			[self addBookmarkAlert];
-			
-			break;
-		default:
-			
-			break;
-	}
-}
 
 
 #pragma mark -
@@ -288,47 +302,6 @@ static NSString *CellIdentifier = @"Cell";
 
 
 
-
-
-- (void)loadContent {
-	
-	NSUInteger flag = showHiddenFiles ? 0 : NSDirectoryEnumerationSkipsHiddenFiles;
-	
-	
-	
-	
-	NSArray *dirURLs = @[];
-	
-	if (exCall) {
-		NSError *err;
-		dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
-		
-		if (err) {
-			[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
-		}
-		
-	}else {
-		
-		currentURL = kora.documentsDirectory;
-		NSError *err;
-		dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
-		
-		
-		if (err) {
-			[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
-		}
-	}
-	
-	
-	self.title = [currentURL lastPathComponent];
-	
-	dirCon = [dirURLs mutableCopy];
-	
-	[dirCon sortUsingComparator:^NSComparisonResult(NSURL* a, NSURL* b) {
-		return [a.path caseInsensitiveCompare:b.path];
-	}];;
-}
-
 #pragma mark -
 #pragma mark Table View Data Source
 
@@ -388,7 +361,7 @@ static NSString *CellIdentifier = @"Cell";
 		
 		//Create sizeLabel from filesize and set it to accessoryView
 		UILabel* sizeLabel = [[UILabel alloc] init];
-		sizeLabel.text = [self fileSizeAtFullPath:fileURL];
+		sizeLabel.text = [kora fileSizeAtFullPath:fileURL];
 		sizeLabel.textColor = [UIColor lightGrayColor];
 		sizeLabel.font = [sizeLabel.font fontWithSize:10];
 		sizeLabel.textAlignment = NSTextAlignmentCenter;
@@ -405,10 +378,16 @@ static NSString *CellIdentifier = @"Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
-	static NSURL *fileURL;
+	
 	//static NSString *fileName;
 	
-	fileURL = dirCon[indexPath.row];
+	NSURL *fileURL = dirCon[indexPath.row];
+	
+	
+	if (![fileManager fileExistsAtPath:fileURL.path isDirectory:nil]) {
+		[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
+		return;
+	}
 	
 	
 	NSNumber *isFile;
@@ -417,6 +396,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 		if (![isFile boolValue]) {
 			FMController *inside = [[FMController alloc] initWithPath:fileURL];
+			if (self.inAppDir) inside.inAppDir = YES;
 			[self.navigationController pushViewController:inside animated:YES];
 		}else {
 		if (_forField) {
@@ -442,6 +422,38 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark -
 #pragma mark my methods
 
+- (void)setNav {
+	
+	
+	
+	UIBarButtonItem *addFav = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(buttonActions:)];
+	addFav.tag = 2;
+	
+	self.navigationItem.rightBarButtonItem = addFav;
+	
+	//UIBarButtonSystemItemSave
+	
+}
+
+- (void)buttonActions:(id)sender {
+	
+	int tg = [sender tag];
+	
+	switch (tg) {
+		case 1:
+			[self dismissViewControllerAnimated:YES completion:nil];
+			break; 
+		case 2: 
+			
+			[self addBookmarkAlert];
+			
+			break;
+		default:
+			
+			break;
+	}
+}
+
 
 - (void)actionsForFileAtURL:(NSURL*)url {
 	
@@ -454,7 +466,7 @@ static NSString *CellIdentifier = @"Cell";
 		[self dismissViewControllerAnimated:YES completion:^{}];
 }]];
 
-if ([self isPatchFileAtURL:url]) {
+if ([kora isPatchFileAtURL:url]) {
 
 [actionSheet addAction:[UIAlertAction actionWithTitle:@"set Patch" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 	
@@ -476,79 +488,95 @@ if ([self isPatchFileAtURL:url]) {
 	 NSString* filzaPath = [NSString stringWithFormat:@"%@%@", @"filza://view", [url.path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]]]; 
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaPath]];
 }]];
-/*
-[actionSheet addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
-// Distructive button tapped.
-[self dismissViewControllerAnimated:YES completion:^{
+if ([self isSafeDirAtURL:url]) {
+	
+	[actionSheet addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		
 		
 		NSError *erro;
-			[fileManager removeItemAtURL:url error:&erro];
+		
+		if (![fileManager removeItemAtURL:url error:&erro]) {
+			NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
+			[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];
 			
-			if (erro) {
-				[self alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[erro localizedDescription]]];
-			}
+		}else {
+			[self.view makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
+			[self reloadContent];
+		}
 		
-		
-	}];
 	
-}]];
-*/
+	
+	
+	[self dismissViewControllerAnimated:YES completion:^{
+	}];
+		
+	}]];
+} // if not inApp
 
 // Present action sheet.
 [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 
+- (void) reloadContent {
+	
+	
+	[self loadContent];
+	
+	[self.tableView reloadData];
+	
+	
+}
 
 - (void)pulledToRefresh {
 	
-	//Reload table
-	[self loadContent];
-//  [self reloadDataAndDataSources];
-	[self.tableView reloadData];
-  //Stop refreshing
-  [self.refreshControl endRefreshing];
+	[self reloadContent];
+	[self.refreshControl endRefreshing];
 	
 	
 	
 }
 
 
-- (BOOL)isPatchFileAtURL:(NSURL*)file {
+- (BOOL)isSafeDirAtURL:(NSURL*)url {
 	
-	
-	
-	NSString* ext = [file.pathExtension lowercaseString];
-	
-	NSArray *supportedExtensions = @[
-	@"ups",
-	@"ips",
-	@"ppf",
-	@"bps",
-	@"rup",
-	];
-	if ([supportedExtensions containsObject:ext]) return YES;
-	
-	
-	/*if([lowerPath hasSuffix:@".ups"]){
-		return TRUE;
+	if (self.inAppDir) {
+		if (!self.allowDeletingFromApps) return NO;
+		return YES;
 	}
-	else if ([lowerPath hasSuffix:@".ips"]){
-		return TRUE;
-	}
-	else if([lowerPath hasSuffix:@".ppf"]){
-		return TRUE;
-	}
-	else if([lowerPath hasSuffix:@".bps"]){
-		return TRUE;
-	}
-	else if([lowerPath hasSuffix:@".rup"]){
-		return TRUE;
-	}*/
 	
-	return NO;
+	if ([url.path rangeOfString:[kora documentsDirectory].path options:NSCaseInsensitiveSearch].location != NSNotFound) {
+		return YES;
+	}
+	
+	
+	if ([url.path rangeOfString:@"/var/mobile" options:NSCaseInsensitiveSearch].location == NSNotFound || [url.path rangeOfString:@"/private/var/mobile" options:NSCaseInsensitiveSearch].location == NSNotFound) return NO;
+	
+	
+	for (NSString* badPath in [kora notOkPaths]) {
+		
+		if ([url.path rangeOfString:badPath options:NSCaseInsensitiveSearch].location != NSNotFound) return NO;
+		
+	}
+	
+	return YES;
+}
+
+
+- (void)navBarMagic {
+	
+	self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+	self.navigationController.navigationBar.translucent = NO;
+	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+	
+	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	
+	[[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+
+	[[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+	
 	
 }
 
@@ -562,33 +590,8 @@ if ([self isPatchFileAtURL:url]) {
   }
 }
 
-/*
-- (void)alertWithTitle:(NSString *)tot message:(NSString *)mes 
-{
-	
-	
-	
-	UIAlertView *allert = [[UIAlertView alloc] initWithTitle:tot message:mes delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[allert show];
-	
-}*/
 
-- (NSString *)fileSizeAtFullPath:(NSURL *)fullPath {
-	
-	 
-	
-	NSError *error;
-	NSDictionary *fileAttr = [fileManager attributesOfItemAtPath:[fullPath path] error:&error]; 
-	
-	if (error) {
-		[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[error localizedDescription]]];
-		return @"error";
-	}
-	
-	return [NSByteCountFormatter stringFromByteCount:[fileAttr fileSize] countStyle:NSByteCountFormatterCountStyleFile];
-	
-}
+
 
 /*
 - (UIStatusBarStyle)preferredStatusBarStyle

@@ -61,6 +61,10 @@ Avatar *kora;
 
 - (void)viewDidLoad {
 	
+	self.refreshControl = [[UIRefreshControl alloc] init];
+	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
+	
+	
 	[super viewDidLoad];
 	
 	[self loadContent];
@@ -72,8 +76,11 @@ Avatar *kora;
 	
 	[super viewDidAppear:anim];
 	
-	[self reloadFavs];
+	
+	
 }
+
+
 
 - (void)loadContent {
 	
@@ -100,7 +107,21 @@ Avatar *kora;
 }
 
 
+- (void)pulledToRefresh {
+	
+	//Reload table
+	[self reloadFavs];
+	
+	[self.tableView reloadData];
+	
+	[self.refreshControl endRefreshing];
+	
+	
+	
+}
 
+
+#pragma mark -
 #pragma mark Tableview delegate
 
 
@@ -147,10 +168,15 @@ Avatar *kora;
 	
 	Bookmark *bm = bookmarks[ip.row];
 	
-	NSURL *path = bm.isApp == NO ? bm.URL : [bm getAppDataURL];
+	NSURL *pathURL = bm.isApp == NO ? bm.URL : [bm getAppDataURL];
 	
 	
-	[self.navigationController pushViewController:[[FMController alloc] initWithPath:path] animated:YES];
+	if (![kora.fileManager fileExistsAtPath:pathURL.path isDirectory:nil]) {
+		[kora alertWithTitle:@"Folder Not found" message:@"Folder doesn't exsist"];
+		return;
+	}
+	
+	[self.navigationController pushViewController:[[FMController alloc] initWithPath:pathURL] animated:YES];
 	
 	
 	
@@ -161,7 +187,7 @@ Avatar *kora;
 
 
 
-
+#pragma mark -
 #pragma mark custom functions
 
 

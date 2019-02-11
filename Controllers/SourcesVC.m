@@ -1,6 +1,7 @@
 #import "SourcesVC.h"
 #import "../shared.h"
 #import <LSApplicationWorkspace.h>
+#import "../Headers/LSApplicationProxy.h"
 //#import <LSApplicationProxy.h>
 #import "FMController.h"
 
@@ -50,6 +51,7 @@ Avatar *kora;
 	[super loadView];
 	
 	self.view.backgroundColor = kBgcolor;
+	self.title = @"Others";
 	kora = [Avatar shared];
 }
 
@@ -63,27 +65,44 @@ Avatar *kora;
 	
 	
 	
-	
-		/*[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-	dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{*/
-		// Do something...
+	self.refreshControl = [[UIRefreshControl alloc] init];
+	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
 		
-		[self loadContent];
-		
-		/*dispatch_async(dispatch_get_main_queue(), ^{
-		
-		[MBProgressHUD hideHUDForView:self.view animated:YES];
-	});
-});*/
 	
 }
 
 - (void)viewDidAppear:(BOOL)anim {
-	
 	[super viewDidAppear:anim];
+	
+	
+	
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		[self updateContentOnMainThred];
+	});
+	
+	
 	
 	//[self reloadFavs];
 }
+
+- (void)updateContentOnMainThred {
+	
+	
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+		// Do something...
+		
+		[self loadContent];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+		
+		[MBProgressHUD hideHUDForView:self.view animated:YES];
+		});
+	});
+	
+}
+
 
 - (void)loadContent {
 	
@@ -92,15 +111,44 @@ Avatar *kora;
 	
 	LSApplicationWorkspace *workspace = [LSApplicationWorkspace defaultWorkspace];
 	if (workspace) {
-		uApps = [workspace applicationsOfType:0];
+		NSMutableArray *mar = [workspace applicationsOfType:0];
+		
+		__block NSMutableIndexSet *sIdxs = [[NSMutableIndexSet alloc] init];
+		
+		[mar enumerateObjectsUsingBlock:^(LSApplicationProxy *app, NSUInteger idx, BOOL *stop) {
+			
+			if (!app.isStickerProvider) return;
+			
+			[sIdxs addIndex:idx];
+		}];
+		[mar removeObjectsAtIndexes:sIdxs];
+		
+		uApps = [mar copy];
+		mar = nil;
+		
 		[self sortArrayAscending:YES];
 	}else {
 		[kora alertWithTitle:@"Error" message:@"Failed to get user apps"];
 	}
 	
 	
+	[self.tableView reloadData];
+}
+
+
+- (void)pulledToRefresh {
+	
+	//Reload table
+	[self updateContentOnMainThred];
+//  [self reloadDataAndDataSources];
+	[self.tableView reloadData];
+  //Stop refreshing
+  [self.refreshControl endRefreshing];
+	
+	
 	
 }
+
 
 - (void)sortArrayAscending:(BOOL)flag {
 	

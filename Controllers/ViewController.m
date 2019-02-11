@@ -20,10 +20,6 @@ PatchFormat currentFormat;
 @property (nonatomic, strong) UIButton *applyBtn;
 @property (nonatomic, strong) UILabel *statusLabel;
 
-//@property (nonatomic, strong) MBProgressHUD *hud;
-
-//@property (nonatomic, strong) UIToolbar *toolbar;
-
 @end
 
 
@@ -89,17 +85,9 @@ PatchFormat currentFormat;
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	
-	
-	//docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0];
-	
-	
 	[self loadFields];
 	[self loadButtons];
 	[self loadLabels];
-	//[self loadToolbar];
-	
-	//hud.label.text = @"Patching";
 	
 	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -109,19 +97,19 @@ PatchFormat currentFormat;
 - (void)loadFields {
 	
 	romPathField = [[txtField alloc] initWithFrame:CGRectMake(20, kFieldY, (SCR.width - 40), kDefH)];
-	romPathField.placeholder = @"Selcet rom file";
+	romPathField.placeholder = @"ROM";
 	romPathField.tag = 1;
 	
 	romPathField.delegate = self;
 	
 	patchPathField = [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(romPathField)), (SCR.width - 40), kDefH)]; 
 	patchPathField.tag = 2;
-	patchPathField.placeholder = @"Select patch file";
+	patchPathField.placeholder = @"PATCH";
 	patchPathField.delegate = self;
 	
 	resultPathField = [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(patchPathField)), (SCR.width - 40), kDefH)];
 	
-	resultPathField.placeholder = @"patched file name";
+	resultPathField.placeholder = @"OUTPUT";
 	resultPathField.delegate = self;
 	resultPathField.tag = 5;
 	
@@ -131,55 +119,7 @@ PatchFormat currentFormat;
 	[SV addSubview:patchPathField]; 
 	
 }
-/*
-- (void)loadToolbar {
-	
-	
-	
-	
-	UIBarButtonItem* filesBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(openFiles:)];
-	
-	
-	
-	toolbar = [[UIToolbar alloc] init];
-	toolbar.frame = CGRectMake(0, (SVFS.height - 44), SCR.width, 44);
-	toolbar.barTintColor = kBgcolor;
-	toolbar.tintColor = kFgcolor;
-	//toolbar.translucent = YES;
-	
-	
-	toolbar.translatesAutoresizingMaskIntoConstraints = false;
-	
-	
-	
-	   
-	
-	
-	
-	UIBarButtonItem *flexable = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	
-	
-	NSArray *items = @[clearButton, flexable,filesBtn];
-	
-	
-	
-	
-	
-	[toolbar setItems:items animated:NO];
-	
-	[SV addSubview:toolbar];
-	
-	
-	[NSLayoutConstraint constraintWithItem:toolbar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0].active = true;
-	
-	
-	[NSLayoutConstraint constraintWithItem:toolbar attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0].active = true;
-	[NSLayoutConstraint constraintWithItem:toolbar attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0].active = true;
-	
-	
-}
 
-*/
 - (void)loadButtons {
 	
 	
@@ -224,22 +164,22 @@ PatchFormat currentFormat;
 		
 		if(errMsg == nil){
 			//[hud hideAnimated:YES];
-			[self alertWithTitle:@"Done" message:@"patch has been applied"];
+			[kora alertWithTitle:@"Done" message:@"patch has been applied"];
 			
 		}
 		else if(errMsg.IsWarning){
 			//[hud hideAnimated:YES];
 			
-			[self alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
+			[kora alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
 			errMsg = nil;
 		}else  {
-			[self alertWithTitle:@"Patching Failed" message:errMsg.Message];
+			[kora alertWithTitle:@"Patching Failed" message:errMsg.Message];
 		}
 		
 		
 		}
 		else{
-			[self alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
+			[kora alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
 		}
 }
 	
@@ -268,7 +208,7 @@ PatchFormat currentFormat;
 	NSURL *newURL = nil;
 	
 	if (tF.tag == 5) {
-		if ([tF.text isEqualToString:@""]){
+		if ([tF.text isEqualToString:@""] || !tF.text){
 		newURL = [NSURL fileURLWithPath:[[kora documentsDirectory].path stringByAppendingPathComponent:tF.text] isDirectory:NO];
 		}else {
 			if (tF.fileURL) {
@@ -279,13 +219,15 @@ PatchFormat currentFormat;
 		NSString *newStr = [tF.fileURL.path stringByDeletingLastPathComponent];
 		
 		newStr = [newStr stringByAppendingPathComponent:tF.text];
+		if (![newStr.pathExtension isEqualToString:ex]) {
+			newStr = [newStr stringByAppendingPathExtension:ex];
+		}
 		
-		newStr = [newStr stringByAppendingPathExtension:ex];
 		newURL = [NSURL fileURLWithPath:newStr isDirectory:NO];
-		}
-		}
+			} //if tf.fileURL
+		} //else
 		tF.fileURL = newURL;
-	}
+	}// if tag
 	
 	
 	[tF resignFirstResponder];
@@ -294,16 +236,11 @@ PatchFormat currentFormat;
 	
 	
 }
-
+/*
 - (void)textFieldDidBeginEditing:(UITextField *)tF {
 	
 	
 	if (tF.tag == 1 | tF.tag == 2) {
-		
-		//UINavigationController *filesNavVC = [[UINavigationController alloc] initWithRootViewController:[[FMController alloc] initWithTarget:tF parent:self]];
-	
-		//[self presentViewController:filesNavVC animated:YES completion:nil];
-	
 	
 	
 	FMController *filesVC = [[FMController alloc] initWithTarget:tF.tag];
@@ -314,13 +251,13 @@ PatchFormat currentFormat;
 	
 	
 	}
-}
+}*/
 
 
 #pragma mark -
 #pragma mark my Methods
 
-
+/*
 - (void)setURL:(NSURL *)url forFieldTag:(int)tag {
 	if (tag == 2) {
 		currentFormat = [self detectPatchFormat:url.path];
@@ -342,7 +279,7 @@ PatchFormat currentFormat;
 	}
 	((txtField*)viewTag(tag)).fileURL = url;
 	((txtField*)viewTag(tag)).text = [url lastPathComponent];
-}
+}*/
 
 - (void)setFileURL:(NSNotification*)noti {
 	
@@ -396,29 +333,6 @@ PatchFormat currentFormat;
 }
 
 
-- (void)openFiles:(id)sender {
-	
-	
-	FMController *filesVC = [[FMController alloc] initWithPath:kora.documentsDirectory];
-	//filesVC.delegate = self;
-	
-		[self.navigationController pushViewController:filesVC animated:YES];
-	
-	
-	
-}
-
-- (void)alertWithTitle:(NSString *)tot message:(NSString *)mes 
-{
-	
-	
-	
-	UIAlertView *allert = [[UIAlertView alloc] initWithTitle:tot message:mes delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	
-	[allert show];
-	
-}
-
 #pragma mark -
 #pragma mark patching
 
@@ -440,6 +354,8 @@ PatchFormat currentFormat;
 	}
 	else if([lowerPath hasSuffix:@".rup"]){
 		return RUPPAT;
+	}else if([lowerPath hasSuffix:@".dat"] || [lowerPath hasSuffix:@"delta"]){
+		return XDELTAPAT;
 	}
 	return UNKNOWNPAT;
 }
@@ -460,6 +376,8 @@ PatchFormat currentFormat;
     }
     else if(currentFormat == RUPPAT){
         retval = [RUPAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
+    }else if(currentFormat == XDELTAPAT){
+        retval = [XDeltaAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
     }
 	return retval;
 }

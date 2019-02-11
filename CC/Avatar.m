@@ -1,10 +1,10 @@
 #import "Avatar.h"
-#import "../shared.h"
-#import <LSApplicationWorkspace.h>
+//#import "../shared.h"
+//#import <LSApplicationWorkspace.h>
 
 @implementation Avatar
 
-@synthesize documentsDirectory;
+@synthesize documentsDirectory, fileManager;
 
 
 #pragma mark Singleton Methods
@@ -19,10 +19,12 @@
 }
 
 - (id)init {
-  if (self = [super init]) {
-      documentsDirectory = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0]];
-  }
-  return self;
+	if (self = [super init]) {
+		documentsDirectory = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0]];
+		
+		fileManager = [NSFileManager defaultManager];
+	}
+	return self;
 }
 
 - (UIImage*) folderIcon {
@@ -52,6 +54,70 @@
 }
 
 
+- (BOOL)isPatchFileAtURL:(NSURL*)file {
+	
+	
+	
+	NSString* ext = [file.pathExtension lowercaseString];
+	
+	NSArray *supportedExtensions = @[
+	@"ups",
+	@"ips",
+	@"ppf",
+	@"bps",
+	@"rup",
+	@"delta",
+	@"dat",
+	@"xdelta",
+	];
+	if ([supportedExtensions containsObject:ext]) return YES;
+	
+	
+	return NO;
+	
+}
+
+- (NSArray*)notOkPaths {
+	
+	if (!_notOkPaths){
+	
+	_notOkPaths = @[
+		@"/var/mobile/Library",
+		@"/var/mobile/Containers",
+		@"/var/mobile/Media/DCIM",
+		@"/var/mobile/Media/Books",
+		@"/var/mobile/Media/Downloads",
+		@"/var/mobile/Media/general_storage",
+		@"/var/mobile/Media/iTunes_Control",
+		@"/var/mobile/Media/MediaAnalysis",
+		@"/var/mobile/Media/Memories",
+		@"/var/mobile/Media/PhotoData",
+		@"/var/mobile/Media/Photos",
+		@"/var/mobile/Media/Podcasts",
+		@"/var/mobile/Media/Recordings",
+		@"/var/mobile/Media/PublicStaging",
+		@"/var/mobile/MobileSoftwareUpdate"
+	];
+	}
+	return _notOkPaths;
+}
+
+
+- (NSString *)fileSizeAtFullPath:(NSURL *)fullPath {
+	
+	 
+	
+	NSError *error;
+	NSDictionary *fileAttr = [fileManager attributesOfItemAtPath:fullPath.path error:&error]; 
+	
+	if (error) {
+		[self alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[error localizedDescription]]];
+		return @"error";
+	}
+	
+	return [NSByteCountFormatter stringFromByteCount:[fileAttr fileSize] countStyle:NSByteCountFormatterCountStyleFile];
+	
+}
 
 
 
