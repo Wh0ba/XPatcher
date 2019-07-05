@@ -37,4 +37,3 @@ include $(THEOS_MAKE_PATH)/application.mk
 
 package::
 	packages/dab
-	open com.wh0ba.ipatch
