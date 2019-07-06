@@ -5,6 +5,8 @@
 #TO-DO 
 
 
+- Add git Sub modules to keep dependences updated 
+
 - Add Open In support ( high priority )
 
 - change text field positions to use Auto Layout
