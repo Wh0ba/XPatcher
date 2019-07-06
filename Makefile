@@ -4,7 +4,7 @@ ARCHS = arm64
 
 include $(THEOS)/makefiles/common.mk
 
-APPLICATION_NAME = iPatch
+APPLICATION_NAME = XPatcher
 
 
 
