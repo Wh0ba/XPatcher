@@ -36,4 +36,4 @@ CCFLAGS += -std=c++11
 include $(THEOS_MAKE_PATH)/application.mk
 
 package::
-	packages/dab
+	packages/deb2ipa.sh
