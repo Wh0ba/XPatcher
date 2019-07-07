@@ -4,7 +4,7 @@
 //
 
 #import "UPSAdapter.h"
-#include "../flips/flips.h"
+#include "../Flips/flips.h"
 
 @implementation UPSAdapter
 +(MPPatchResult*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{

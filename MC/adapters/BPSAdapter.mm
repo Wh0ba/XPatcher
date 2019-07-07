@@ -4,7 +4,7 @@
 //
 
 #import "BPSAdapter.h"
-#include "../flips/flips.h"
+#include "../Flips/flips.h"
 
 @implementation BPSAdapter
 +(MPPatchResult*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
