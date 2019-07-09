@@ -483,12 +483,17 @@ if ([kora isPatchFileAtURL:url]) {
 	
 }]];
 
+[actionSheet addAction:[UIAlertAction actionWithTitle:@"Open In" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+	UIActivityViewController* OpenInVC =[[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+	[self presentViewController:OpenInVC animated:YES completion:nil];
+}]];
 
+/*
 [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open In Filza" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 	 NSString* filzaPath = [NSString stringWithFormat:@"%@%@", @"filza://view", [url.path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]]]; 
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaPath]];
 }]];
-
+*/
 if ([self isSafeDirAtURL:url]) {
 	
 	[actionSheet addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {

@@ -1,4 +1,6 @@
-ARCHS = arm64
+ARCHS = armv7 arm64
+
+FINALPACKAGE=1
 
 #GO_EASY_ON_ME = 1
 
@@ -38,5 +40,5 @@ CCFLAGS += -std=c++11
 
 include $(THEOS_MAKE_PATH)/application.mk
 
-package::
-	packages/deb2ipa.sh
+#package::
+#	packages/deb2ipa.h
