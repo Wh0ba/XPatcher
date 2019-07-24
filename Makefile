@@ -1,6 +1,5 @@
-ARCHS = armv7 arm64
+ARCHS = arm64
 
-FINALPACKAGE=1
 
 #GO_EASY_ON_ME = 1
 
