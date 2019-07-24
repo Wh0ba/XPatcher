@@ -35,9 +35,9 @@ function deb2ipa {
 
 	zip -q -r Payload.zip Payload
 	
-	filename=$(echo $1 | rev | cut -f 2- -d '.' | rev)
+	filename=$(echo $1 | sed 's/\.deb$/.ipa/')
 
-	mv Payload.zip ../ipa/$filename.ipa
+	mv Payload.zip ../ipa/$filename
 
 	cd ..
 
@@ -48,7 +48,7 @@ function deb2ipa {
 	#rm *.deb
 
 	echo "Done"
-	echo "Converted $1 to $filename.ipa"
+	echo "Converted $1 to $filename"
 	echo "Stored the file in the ipa folder"
 
 	#sleep 0.1s
