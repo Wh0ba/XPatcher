@@ -7,7 +7,7 @@
 
 #import "RUPAdapter.h"
 
-#import "../flips/librup.h"
+#import "librup/librup.h"
 
 
 

@@ -4,7 +4,7 @@
 //
 
 #import "IPSAdapter.h"
-#include "../flips/flips.h"
+#include "../Flips/flips.h"
 
 @implementation IPSAdapter
 +(MPPatchResult*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{

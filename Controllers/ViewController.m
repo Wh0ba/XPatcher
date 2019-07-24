@@ -56,7 +56,7 @@ PatchFormat currentFormat;
 	[super loadView];
 	self.view.backgroundColor = kBgcolor;
 	
-	self.title = @"iPatch";
+	self.title = @"XPatcher";
 	
 	[self navBarMagic];
 	
@@ -87,7 +87,7 @@ PatchFormat currentFormat;
 	
 	[self loadFields];
 	[self loadButtons];
-	[self loadLabels];
+	//[self loadLabels];
 	
 	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -155,11 +155,11 @@ PatchFormat currentFormat;
 	
 	if([fileManager fileExistsAtPath:patchPath]){
 		if([romPath length] > 0 && [outputPath length] > 0 && [patchPath length] > 0){
-			statusLabel.text = @"Now patching...";
+			//statusLabel.text = @"Now patching...";
 	
 	MPPatchResult* errMsg = [self ApplyPatch:patchPath :romPath :outputPath];
 		//[activityIndicator stopAnimating];
-		statusLabel.text = @"Ready";
+		//statusLabel.text = @"Ready";
 		
 		
 		if(errMsg == nil){
@@ -178,10 +178,11 @@ PatchFormat currentFormat;
 		
 		
 		}
-		else{
-			[kora alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
-		}
-}
+	}
+	else{
+		[kora alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
+	}
+
 	
 }
 

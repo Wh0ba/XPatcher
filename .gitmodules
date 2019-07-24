@@ -1,0 +1,3 @@
+[submodule "MC/Flips"]
+	path = MC/Flips
+	url = https://github.com/Alcaro/Flips.git
