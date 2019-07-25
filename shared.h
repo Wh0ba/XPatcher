@@ -17,7 +17,7 @@
 
 
 
-#define kFMReloadContent @“FM.ReloadContent”
+#define kFMReloadContent @"FM.ReloadContent"
 
 #define kBgcolor [UIColor whiteColor]
 #define kFgcolor [UIColor blackColor]
