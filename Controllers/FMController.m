@@ -74,7 +74,12 @@ static NSString *CellIdentifier = @"Cell";
 	[self loadContent];
 	
 	if (![currentURL isEqual:kora.documentsDirectory])[self setNav];
-	
+
+
+	[[NSNotificationCenter defaultCenter] 		addObserver:self
+	selector:@selector(reloadContent) 
+        name:kFMReloadContent
+        object:nil];
 	
 	
 }
@@ -204,7 +209,7 @@ static NSString *CellIdentifier = @"Cell";
 
 #pragma mark -
 #pragma mark bookmarks
-
+/*
 - (void)addBookmarkAlert {
 	
 	UIAlertController *bookmarkAlert = [UIAlertController alertControllerWithTitle:@"Add Bookmark" message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -298,9 +303,7 @@ static NSString *CellIdentifier = @"Cell";
 		return [[Bookmark alloc] initForNonAppWithName:name URL:url];
 	}
 }
-
-
-
+*/
 
 #pragma mark -
 #pragma mark Table View Data Source
@@ -421,7 +424,7 @@ static NSString *CellIdentifier = @"Cell";
 
 #pragma mark -
 #pragma mark my methods
-
+/*
 - (void)setNav {
 	
 	
@@ -434,7 +437,7 @@ static NSString *CellIdentifier = @"Cell";
 	//UIBarButtonSystemItemSave
 	
 }
-
+*/
 - (void)buttonActions:(id)sender {
 	
 	int tg = [sender tag];
@@ -445,7 +448,7 @@ static NSString *CellIdentifier = @"Cell";
 			break; 
 		case 2: 
 			
-			[self addBookmarkAlert];
+			//[self addBookmarkAlert];
 			
 			break;
 		default:
@@ -596,6 +599,10 @@ if ([self isSafeDirAtURL:url]) {
 }
 
 
+- (void) dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 
 /*

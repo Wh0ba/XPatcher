@@ -183,7 +183,10 @@ PatchFormat currentFormat;
 		[kora alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
 	}
 
-	
+//kFMReloadContent
+	[[NSNotificationCenter defaultCenter] 
+       postNotificationName:kFMReloadContent
+        object:nil userInfo:nil];
 }
 
 
@@ -237,50 +240,6 @@ PatchFormat currentFormat;
 	
 	
 }
-/*
-- (void)textFieldDidBeginEditing:(UITextField *)tF {
-	
-	
-	if (tF.tag == 1 | tF.tag == 2) {
-	
-	
-	FMController *filesVC = [[FMController alloc] initWithTarget:tF.tag];
-	filesVC.delegate = self;
-	
-		[self.navigationController pushViewController:filesVC animated:YES];
-	
-	
-	
-	}
-}*/
-
-
-#pragma mark -
-#pragma mark my Methods
-
-/*
-- (void)setURL:(NSURL *)url forFieldTag:(int)tag {
-	if (tag == 2) {
-		currentFormat = [self detectPatchFormat:url.path];
-		
-	}else if (tag == 1) {
-		
-		
-		NSString *ex = [url.path pathExtension];
-		
-		NSString *newStr = [url.path stringByDeletingPathExtension];
-		
-		newStr = [newStr stringByAppendingPathComponent:@"[Patched]"];
-		
-		newStr = [newStr stringByAppendingPathExtension:ex];
-		NSURL *resultURL = [NSURL fileURLWithPath:newStr isDirectory:NO];
-		resultPathField.fileURL = resultURL;
-		
-		resultPathField.text = [resultURL lastPathComponent];
-	}
-	((txtField*)viewTag(tag)).fileURL = url;
-	((txtField*)viewTag(tag)).text = [url lastPathComponent];
-}*/
 
 - (void)setFileURL:(NSNotification*)noti {
 	

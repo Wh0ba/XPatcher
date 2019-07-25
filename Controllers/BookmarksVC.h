@@ -1,5 +1,0 @@
-@interface BookmarksVC: UITableViewController
-
-
-
-@end
