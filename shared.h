@@ -22,6 +22,9 @@
 #define kBgcolor [UIColor whiteColor]
 #define kFgcolor [UIColor blackColor]
 
+#define kMelroseColor [UIColor colorWithRed:1 green:0.36 blue:0.36 alpha:1]
+
+
 #define kSetFileNotification @"iPatchSetFileURL"
 #define kBookmarksReload @"kFavsReload"
 ///controllers

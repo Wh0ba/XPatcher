@@ -34,7 +34,7 @@ static NSString *CellIdentifier = @"Cell";
 	//id parent, target;
 	int targetTag;// 1 = rom , 2 = patch
 	
-	Avatar *korra;
+	Avatar *Korra;
 	
 }
 @synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
@@ -50,7 +50,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	fileManager = [NSFileManager defaultManager];
 	
-	korra = [Avatar shared];
+	Korra = [Avatar shared];
 	
 	showHiddenFiles = NO;
 	allowDeletingFromApps = NO;
@@ -73,7 +73,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	[self loadContent];
 	
-//	if (![currentURL isEqual:korra.documentsDirectory])[self setNav];
+//	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
 
 
 	[[NSNotificationCenter defaultCenter] 		addObserver:self
@@ -106,7 +106,7 @@ static NSString *CellIdentifier = @"Cell";
 		//parent = par;
 		targetTag = tar;
 		self.forField = YES;
-		self.title = [korra.documentsDirectory lastPathComponent];
+		self.title = [Korra.documentsDirectory lastPathComponent];
 		}
 	
 	
@@ -169,7 +169,7 @@ static NSString *CellIdentifier = @"Cell";
 		
 		//check if the directory doesn't exist
 		if (!currentURL || ![fileManager fileExistsAtPath:currentURL.path isDirectory:nil]) {
-			[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"Folder doesn't exsist"]];
+			[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"Folder doesn't exsist"]];
 			
 			dirURLs = @[];
 			
@@ -180,18 +180,18 @@ static NSString *CellIdentifier = @"Cell";
 			dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
 			
 			if (err) {
-				[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
+				[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
 			}
 		}
 	}else {
 		
-		currentURL = korra.documentsDirectory;
+		currentURL = Korra.documentsDirectory;
 		NSError *err;
 		dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
 		
 		
 		if (err) {
-			[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
+			[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
 		}
 	}
 	
@@ -351,20 +351,20 @@ static NSString *CellIdentifier = @"Cell";
 	
 		cell.detailTextLabel.text = @"Folder";
 		//cell.textLabel.textColor = [UIColor blueColor];
-		cell.imageView.image = [korra folderIcon];
+		cell.imageView.image = [Korra folderIcon];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
 		cell.accessoryView = nil;
 		
 	}else {
 		
-		cell.imageView.image = [korra fileIcon];
+		cell.imageView.image = [Korra fileIcon];
 		//Remove possibly reused arrow on the right
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		
 		//Create sizeLabel from filesize and set it to accessoryView
 		UILabel* sizeLabel = [[UILabel alloc] init];
-		sizeLabel.text = [korra fileSizeAtFullPath:fileURL];
+		sizeLabel.text = [Korra fileSizeAtFullPath:fileURL];
 		sizeLabel.textColor = [UIColor lightGrayColor];
 		sizeLabel.font = [sizeLabel.font fontWithSize:10];
 		sizeLabel.textAlignment = NSTextAlignmentCenter;
@@ -388,7 +388,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	
 	if (![fileManager fileExistsAtPath:fileURL.path isDirectory:nil]) {
-		[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
+		[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
 		return;
 	}
 	
@@ -469,7 +469,7 @@ static NSString *CellIdentifier = @"Cell";
 		[self dismissViewControllerAnimated:YES completion:^{}];
 }]];
 
-if ([korra isPatchFileAtURL:url]) {
+if ([Korra isPatchFileAtURL:url]) {
 
 [actionSheet addAction:[UIAlertAction actionWithTitle:@"set Patch" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 	
@@ -497,7 +497,7 @@ if ([korra isPatchFileAtURL:url]) {
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaPath]];
 }]];
 */
-if ([korra isSafeDirAtURL:url]) {
+if ([Korra isSafeDirAtURL:url]) {
 	
 	[actionSheet addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		
@@ -558,7 +558,7 @@ if ([korra isSafeDirAtURL:url]) {
 
 - (void)navBarMagic {
 	
-	self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+	self.navigationController.navigationBar.barTintColor = kMelroseColor;
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.translucent = NO;
 	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];

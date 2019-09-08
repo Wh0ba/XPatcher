@@ -22,9 +22,7 @@ $(APPLICATION_NAME)_FILES = $(wildcard *.m) \
 	 MC/xdelta/xdelta3.c \
 	 CC/Toast/UIView+Toast.m \
 	 $(wildcard MC/adapters/librup/*.c) \
-	 MC/patched_flips_cli.cpp \
-	 CC/MarqueeLabel/MarqueeLabel.m
-
+	 MC/patched_flips_cli.cpp 
 
 
 $(APPLICATION_NAME)_FRAMEWORKS = UIKit CoreGraphics QuartzCore MobileCoreServices

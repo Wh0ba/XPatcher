@@ -3,7 +3,7 @@
 #import "../MC/adapters/adapters.h"
 #import "../CC/txtField.h"
 #define kDefH 50
-#define kFieldY 80
+#define kFieldY 40
 #define sumPosOf(x) ((x.FO.y + x.FS.height) + 20)
 #define viewTag(x) [SV viewWithTag:x]
 
@@ -25,7 +25,7 @@ PatchFormat currentFormat;
 
 
 @implementation ViewController {
-	Avatar *kora;
+	Avatar *Aang;
 }
 @synthesize resultPathField, romPathField, patchPathField, applyBtn ,statusLabel;
 
@@ -40,7 +40,7 @@ PatchFormat currentFormat;
         selector:@selector(setFileURL:) 
         name:kSetFileNotification
         object:nil];
-	kora = [Avatar shared];
+	Aang = [Avatar shared];
 	
 	
 	return self;
@@ -54,7 +54,10 @@ PatchFormat currentFormat;
 
 - (void)loadView {
 	[super loadView];
+	
+	
 	self.view.backgroundColor = kBgcolor;
+	[[UIApplication sharedApplication] keyWindow].tintColor = kMelroseColor;
 	
 	self.title = @"XPatcher";
 	
@@ -66,17 +69,19 @@ PatchFormat currentFormat;
 
 - (void)navBarMagic {
 	
-	self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+	self.navigationController.navigationBar.barTintColor = kMelroseColor;
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-	self.navigationController.navigationBar.translucent = NO;
-	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
+	self.navigationController.navigationBar.translucent = NO;
+	
+	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+	/*
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
 	[[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 
 	[[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-	
+	*/
 	UIBarButtonItem* clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(cleanFields)];
 	self.navigationItem.rightBarButtonItem = clearButton;
 	
@@ -127,7 +132,7 @@ PatchFormat currentFormat;
 	[applyBtn addTarget:self action:@selector(applyPat) forControlEvents:UIControlEventTouchUpInside];
 	[applyBtn setTitle:@"Apply" forState:UIControlStateNormal];
 	[applyBtn setTitleColor:kBgcolor forState:UIControlStateNormal];
-	applyBtn.backgroundColor = kFgcolor;
+	applyBtn.backgroundColor = kMelroseColor;
 	applyBtn.layer.cornerRadius = 7;
 	applyBtn.clipsToBounds = YES;
 	applyBtn.frame = CGRectMake(20, (sumPosOf(viewTag(5)) + 30), (SCR.width - 40), 40);
@@ -164,23 +169,23 @@ PatchFormat currentFormat;
 		
 		if(errMsg == nil){
 			//[hud hideAnimated:YES];
-			[kora alertWithTitle:@"Done" message:@"patch has been applied"];
+			[Aang alertWithTitle:@"Done" message:@"patch has been applied"];
 			
 		}
 		else if(errMsg.IsWarning){
 			//[hud hideAnimated:YES];
 			
-			[kora alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
+			[Aang alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
 			errMsg = nil;
 		}else  {
-			[kora alertWithTitle:@"Patching Failed" message:errMsg.Message];
+			[Aang alertWithTitle:@"Patching Failed" message:errMsg.Message];
 		}
 		
 		
 		}
 	}
 	else{
-		[kora alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
+		[Aang alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
 	}
 
 //kFMReloadContent
@@ -213,7 +218,7 @@ PatchFormat currentFormat;
 	
 	if (tF.tag == 5) {
 		if ([tF.text isEqualToString:@""] || !tF.text){
-		newURL = [NSURL fileURLWithPath:[[kora documentsDirectory].path stringByAppendingPathComponent:tF.text] isDirectory:NO];
+		newURL = [NSURL fileURLWithPath:[[Aang documentsDirectory].path stringByAppendingPathComponent:tF.text] isDirectory:NO];
 		}else {
 			if (tF.fileURL) {
 				
@@ -264,7 +269,7 @@ PatchFormat currentFormat;
 		
 		if ([newStr rangeOfString:@"/var/mobile/Containers/" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 		NSString *fileName = newStr.lastPathComponent;
-		newStr = [kora.documentsDirectory.path stringByAppendingPathComponent:fileName];
+		newStr = [Aang.documentsDirectory.path stringByAppendingPathComponent:fileName];
 		
 		
 		}
