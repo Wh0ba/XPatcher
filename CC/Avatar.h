@@ -21,6 +21,8 @@
 
 - (NSString *)fileSizeAtFullPath:(NSURL *)fullPath;
 
+- (BOOL)isSafeDirAtURL:(NSURL*)url;
+
 - (BOOL)isPatchFileAtURL:(NSURL*)file;
 
 

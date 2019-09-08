@@ -22,7 +22,9 @@ $(APPLICATION_NAME)_FILES = $(wildcard *.m) \
 	 MC/xdelta/xdelta3.c \
 	 CC/Toast/UIView+Toast.m \
 	 $(wildcard MC/adapters/librup/*.c) \
-	 MC/patched_flips_cli.cpp
+	 MC/patched_flips_cli.cpp \
+	 CC/MarqueeLabel/MarqueeLabel.m
+
 
 
 $(APPLICATION_NAME)_FRAMEWORKS = UIKit CoreGraphics QuartzCore MobileCoreServices
@@ -33,6 +35,8 @@ $(APPLICATION_NAME)_FRAMEWORKS = UIKit CoreGraphics QuartzCore MobileCoreService
 $(APPLICATION_NAME)_LIBRARIES = c++
 $(APPLICATION_NAME)_CFLAGS = -fobjc-arc -Wno-unused-function 
 
+
+#$(APPLICATION_NAME)_CODESIGN_FLAGS = -Sent.plist
 
 
 CCFLAGS += -std=c++11 

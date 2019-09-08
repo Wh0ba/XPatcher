@@ -31,6 +31,61 @@
 }
 
 
+// the code below is mostly copy/pasta from GBA4iOS source code 
+// So thank you so much Riley Testut for your amazing work <3
+
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+	
+	if ([url isFileURL]) {
+		
+		[self copyFileAtPathToDocumentsDirectory:[url path]];
+	}
+	return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
+	options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+	
+	if ([url isFileURL])
+	{
+		[self copyFileAtPathToDocumentsDirectory:[url path]];
+	}
+	/*else
+	{
+	return [self handleURLSchemeURL:url];
+	}*/
+	return YES;
+}
+
+- (void)copyFileAtPathToDocumentsDirectory:(NSString *)filepath
+{
+	NSString *documentsDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+	
+	NSString *filename = [filepath lastPathComponent];
+
+	NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
+
+	BOOL fileExists = NO;
+
+	for (NSString *item in contents) {
+		NSString *name = [item stringByDeletingPathExtension];
+		NSString *newFilename = [filename stringByDeletingPathExtension];
+		
+		if ([name isEqualToString:newFilename]) {
+			fileExists = YES;
+			break;
+		}//if
+	}//for loop
+	
+	if (fileExists) {
+		filename = [NSString stringWithFormat:@"%@-copy", filename];
+	}
+	
+	[[NSFileManager defaultManager] moveItemAtPath:filepath toPath:[documentsDirectory stringByAppendingPathComponent:filename] error:nil];
+}
+
+
 
 
 @end

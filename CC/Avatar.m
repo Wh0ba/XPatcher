@@ -20,7 +20,9 @@
 
 - (id)init {
 	if (self = [super init]) {
-		documentsDirectory = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0]];
+	
+		
+		if (!documentsDirectory) documentsDirectory = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0]];
 		
 		fileManager = [NSFileManager defaultManager];
 	}
@@ -100,6 +102,32 @@
 	];
 	}
 	return _notOkPaths;
+}
+
+
+
+- (BOOL)isSafeDirAtURL:(NSURL*)url {
+	/*
+	if (self.inAppDir) {
+		if (!self.allowDeletingFromApps) return NO;
+		return YES;
+	}*/
+	
+	if ([url.path rangeOfString:[self documentsDirectory].path options:NSCaseInsensitiveSearch].location != NSNotFound) {
+		return YES;
+	}
+	
+	
+	if ([url.path rangeOfString:@"/var/mobile" options:NSCaseInsensitiveSearch].location == NSNotFound || [url.path rangeOfString:@"/private/var/mobile" options:NSCaseInsensitiveSearch].location == NSNotFound) return NO;
+	
+	
+	for (NSString* badPath in [self notOkPaths]) {
+		
+		if ([url.path rangeOfString:badPath options:NSCaseInsensitiveSearch].location != NSNotFound) return NO;
+		
+	}
+	
+	return YES;
 }
 
 

@@ -9,7 +9,6 @@ cd "$(dirname "$0")"
 
 
 
-
 function deb2ipa {
 
 	
@@ -32,7 +31,10 @@ function deb2ipa {
 	mv Applications Payload
 
 	echo "renamed"
-
+	
+	
+	
+	
 	zip -q -r Payload.zip Payload
 	
 	filename=$(echo $1 | sed 's/\.deb$/.ipa/')

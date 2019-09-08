@@ -34,7 +34,7 @@ static NSString *CellIdentifier = @"Cell";
 	//id parent, target;
 	int targetTag;// 1 = rom , 2 = patch
 	
-	Avatar *kora;
+	Avatar *korra;
 	
 }
 @synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
@@ -50,7 +50,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	fileManager = [NSFileManager defaultManager];
 	
-	kora = [Avatar shared];
+	korra = [Avatar shared];
 	
 	showHiddenFiles = NO;
 	allowDeletingFromApps = NO;
@@ -73,7 +73,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	[self loadContent];
 	
-	if (![currentURL isEqual:kora.documentsDirectory])[self setNav];
+//	if (![currentURL isEqual:korra.documentsDirectory])[self setNav];
 
 
 	[[NSNotificationCenter defaultCenter] 		addObserver:self
@@ -106,7 +106,7 @@ static NSString *CellIdentifier = @"Cell";
 		//parent = par;
 		targetTag = tar;
 		self.forField = YES;
-		self.title = [kora.documentsDirectory lastPathComponent];
+		self.title = [korra.documentsDirectory lastPathComponent];
 		}
 	
 	
@@ -169,7 +169,7 @@ static NSString *CellIdentifier = @"Cell";
 		
 		//check if the directory doesn't exist
 		if (!currentURL || ![fileManager fileExistsAtPath:currentURL.path isDirectory:nil]) {
-			[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"Folder doesn't exsist"]];
+			[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"Folder doesn't exsist"]];
 			
 			dirURLs = @[];
 			
@@ -180,18 +180,18 @@ static NSString *CellIdentifier = @"Cell";
 			dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
 			
 			if (err) {
-				[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
+				[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
 			}
 		}
 	}else {
 		
-		currentURL = kora.documentsDirectory;
+		currentURL = korra.documentsDirectory;
 		NSError *err;
 		dirURLs = [fileManager contentsOfDirectoryAtURL:currentURL includingPropertiesForKeys:nil options:flag error:&err];
 		
 		
 		if (err) {
-			[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
+			[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",[err localizedDescription]]];
 		}
 	}
 	
@@ -351,20 +351,20 @@ static NSString *CellIdentifier = @"Cell";
 	
 		cell.detailTextLabel.text = @"Folder";
 		//cell.textLabel.textColor = [UIColor blueColor];
-		cell.imageView.image = [kora folderIcon];
+		cell.imageView.image = [korra folderIcon];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
 		cell.accessoryView = nil;
 		
 	}else {
 		
-		cell.imageView.image = [kora fileIcon];
+		cell.imageView.image = [korra fileIcon];
 		//Remove possibly reused arrow on the right
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		
 		//Create sizeLabel from filesize and set it to accessoryView
 		UILabel* sizeLabel = [[UILabel alloc] init];
-		sizeLabel.text = [kora fileSizeAtFullPath:fileURL];
+		sizeLabel.text = [korra fileSizeAtFullPath:fileURL];
 		sizeLabel.textColor = [UIColor lightGrayColor];
 		sizeLabel.font = [sizeLabel.font fontWithSize:10];
 		sizeLabel.textAlignment = NSTextAlignmentCenter;
@@ -388,7 +388,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	
 	if (![fileManager fileExistsAtPath:fileURL.path isDirectory:nil]) {
-		[kora alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
+		[korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
 		return;
 	}
 	
@@ -469,7 +469,7 @@ static NSString *CellIdentifier = @"Cell";
 		[self dismissViewControllerAnimated:YES completion:^{}];
 }]];
 
-if ([kora isPatchFileAtURL:url]) {
+if ([korra isPatchFileAtURL:url]) {
 
 [actionSheet addAction:[UIAlertAction actionWithTitle:@"set Patch" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 	
@@ -478,14 +478,14 @@ if ([kora isPatchFileAtURL:url]) {
 	
 }]];
 }
-
-[actionSheet addAction:[UIAlertAction actionWithTitle:@"set ROM" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+	else {
+		[actionSheet addAction:[UIAlertAction actionWithTitle:@"set ROM" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 	
-	NSDictionary *userInfo = @{@"fileURL":url,@"tag":@1};
-	[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
-	
-}]];
-
+			NSDictionary *userInfo = @{@"fileURL":url,@"tag":@1};
+			[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
+		
+		}]];
+	}
 [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open In" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 	UIActivityViewController* OpenInVC =[[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
 	[self presentViewController:OpenInVC animated:YES completion:nil];
@@ -497,29 +497,36 @@ if ([kora isPatchFileAtURL:url]) {
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaPath]];
 }]];
 */
-if ([self isSafeDirAtURL:url]) {
+if ([korra isSafeDirAtURL:url]) {
 	
 	[actionSheet addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		
 		
-		NSError *erro;
 		
-		if (![fileManager removeItemAtURL:url error:&erro]) {
-			NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
-			[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];
+			UIAlertController *deleteAlert = [UIAlertController alertControllerWithTitle:@"Warning" message:[NSString stringWithFormat:@"are you sure you want to delete %@",url.lastPathComponent] preferredStyle:UIAlertControllerStyleAlert];
+
+			[deleteAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+				[self dismissViewControllerAnimated:YES completion:^{}];
+			}]];
+		
+			[deleteAlert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+				
+				NSError *erro;
+				
+				if (![fileManager removeItemAtURL:url error:&erro]) {
+					NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
+					[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];
+					
+				}else {
+					[self.view makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
+					[self reloadContent];
+				}
+				
+			}]];
 			
-		}else {
-			[self.view makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
-			[self reloadContent];
-		}
-		
-	
-	
-	
-	[self dismissViewControllerAnimated:YES completion:^{
-	}];
-		
-	}]];
+			[self presentViewController:deleteAlert animated:YES completion:nil];
+			
+		}]];
 } // if not inApp
 
 // Present action sheet.
@@ -547,29 +554,6 @@ if ([self isSafeDirAtURL:url]) {
 }
 
 
-- (BOOL)isSafeDirAtURL:(NSURL*)url {
-	
-	if (self.inAppDir) {
-		if (!self.allowDeletingFromApps) return NO;
-		return YES;
-	}
-	
-	if ([url.path rangeOfString:[kora documentsDirectory].path options:NSCaseInsensitiveSearch].location != NSNotFound) {
-		return YES;
-	}
-	
-	
-	if ([url.path rangeOfString:@"/var/mobile" options:NSCaseInsensitiveSearch].location == NSNotFound || [url.path rangeOfString:@"/private/var/mobile" options:NSCaseInsensitiveSearch].location == NSNotFound) return NO;
-	
-	
-	for (NSString* badPath in [kora notOkPaths]) {
-		
-		if ([url.path rangeOfString:badPath options:NSCaseInsensitiveSearch].location != NSNotFound) return NO;
-		
-	}
-	
-	return YES;
-}
 
 
 - (void)navBarMagic {
