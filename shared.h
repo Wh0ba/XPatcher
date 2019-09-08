@@ -27,6 +27,9 @@
 
 #define kDefPatchColor [UIColor colorWithRed:0.7 green:0 blue:1 alpha:1]
 
+#define kDefROMColor [UIColor colorWithRed:0.34 green:0.54 blue:0.76 alpha:1]
+
+
 #define kSetFileNotification @"iPatchSetFileURL"
 #define kBookmarksReload @"kFavsReload"
 ///controllers

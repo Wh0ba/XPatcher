@@ -25,6 +25,7 @@
 
 - (BOOL)isPatchFileAtURL:(NSURL*)file;
 
+- (BOOL)isROMFileAtURL:(NSURL*)file;
 
 
 @end

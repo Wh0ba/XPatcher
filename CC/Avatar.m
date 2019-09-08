@@ -79,6 +79,29 @@
 	
 }
 
+- (BOOL)isROMFileAtURL:(NSURL*)file {
+	
+	
+	
+	NSString* ext = [file.pathExtension lowercaseString];
+	
+	NSArray *supportedExtensions = @[
+	@"gba",
+	@"gb",
+	@"gbc",
+	@"nes",
+	@"smc",
+	@"sfc",
+	@"iso",
+	@"ds",
+	];
+	if ([supportedExtensions containsObject:ext]) return YES;
+	
+	
+	return NO;
+}
+
+
 - (NSArray*)notOkPaths {
 	
 	if (!_notOkPaths){

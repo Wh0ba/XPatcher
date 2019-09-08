@@ -206,7 +206,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 
-
 #pragma mark -
 #pragma mark bookmarks
 /*
@@ -362,6 +361,7 @@ static NSString *CellIdentifier = @"Cell";
 		
 		if ([Korra isPatchFileAtURL:fileURL]) cell.textLabel.textColor = kDefPatchColor;
 		
+		if ([Korra isROMFileAtURL:fileURL]) cell.textLabel.textColor = kDefROMColor;
 		cell.imageView.image = [Korra fileIcon];
 		//Remove possibly reused arrow on the right
 		cell.accessoryType = UITableViewCellAccessoryNone;
