@@ -325,6 +325,8 @@ static NSString *CellIdentifier = @"Cell";
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
 	
+	cell.textLabel.numberOfLines = 0;
+	
 	cell.textLabel.textColor = Black;
 	
 	return cell;
@@ -357,6 +359,8 @@ static NSString *CellIdentifier = @"Cell";
 		cell.accessoryView = nil;
 		
 	}else {
+		
+		if ([Korra isPatchFileAtURL:fileURL]) cell.textLabel.textColor = kDefPatchColor;
 		
 		cell.imageView.image = [Korra fileIcon];
 		//Remove possibly reused arrow on the right

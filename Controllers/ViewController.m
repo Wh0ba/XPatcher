@@ -102,19 +102,19 @@ PatchFormat currentFormat;
 - (void)loadFields {
 	
 	romPathField = [[txtField alloc] initWithFrame:CGRectMake(20, kFieldY, (SCR.width - 40), kDefH)];
-	romPathField.placeholder = @"ROM";
+	romPathField.placeholder = @"Waiting for a ROM";
 	romPathField.tag = 1;
 	
 	romPathField.delegate = self;
 	
 	patchPathField = [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(romPathField)), (SCR.width - 40), kDefH)]; 
 	patchPathField.tag = 2;
-	patchPathField.placeholder = @"PATCH";
+	patchPathField.placeholder = @"Waiting for a Patch file";
 	patchPathField.delegate = self;
 	
 	resultPathField = [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(patchPathField)), (SCR.width - 40), kDefH)];
 	
-	resultPathField.placeholder = @"OUTPUT";
+	resultPathField.placeholder = @"Result File";
 	resultPathField.delegate = self;
 	resultPathField.tag = 5;
 	
@@ -122,6 +122,89 @@ PatchFormat currentFormat;
 	[SV addSubview:resultPathField];
 	[SV addSubview:romPathField];
 	[SV addSubview:patchPathField]; 
+	
+	resultPathField.translatesAutoresizingMaskIntoConstraints = NO;
+	romPathField.translatesAutoresizingMaskIntoConstraints = NO;
+	patchPathField.translatesAutoresizingMaskIntoConstraints = NO;
+	
+	
+	//NSLayoutConstraint* TopFieldCn = 
+	[NSLayoutConstraint constraintWithItem:romPathField
+		attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+		toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom
+		multiplier:1.0 constant:20].active = true;
+		
+	[NSLayoutConstraint constraintWithItem:romPathField
+	attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
+	toItem:nil attribute:NSLayoutAttributeHeight
+ 	multiplier:0 constant:kDefH].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:romPathField
+	attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeLeading
+	multiplier:1.0 constant:20].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:romPathField
+	attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeTrailing
+	multiplier:1.0 constant:-20].active = true;
+		
+		
+		
+		
+		/////////////////////////
+		
+		
+		
+		
+	[NSLayoutConstraint constraintWithItem:patchPathField
+	attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+	toItem:romPathField attribute:NSLayoutAttributeBottom
+	multiplier:1.0 constant:20].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:patchPathField
+	attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
+	toItem:nil attribute:NSLayoutAttributeHeight
+ 	multiplier:0 constant:kDefH].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:patchPathField
+	attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeLeading
+	multiplier:1.0 constant:20].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:patchPathField
+	attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeTrailing
+	multiplier:1.0 constant:-20].active = true;
+		
+		
+		//////////)/)/)/)/)/((//))//))/)/
+		
+		[NSLayoutConstraint constraintWithItem:resultPathField
+		attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+		toItem:patchPathField attribute:NSLayoutAttributeBottom
+		multiplier:1.0 constant:20].active = true;
+		
+		[NSLayoutConstraint constraintWithItem:resultPathField
+	attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
+	toItem:nil attribute:NSLayoutAttributeHeight
+ 	multiplier:0 constant:kDefH].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:resultPathField
+	attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeLeading
+	multiplier:1.0 constant:20].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:resultPathField
+	attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeTrailing
+	multiplier:1.0 constant:-20].active = true;
+	
+		
+		
+		//resultPathField
+	
+	//[self.rootViewController.view addConstraint:TopFieldCn];
 	
 }
 
@@ -137,9 +220,31 @@ PatchFormat currentFormat;
 	applyBtn.clipsToBounds = YES;
 	applyBtn.frame = CGRectMake(20, (sumPosOf(viewTag(5)) + 30), (SCR.width - 40), 40);
 	
-	
-	
 	[SV addSubview:applyBtn];
+	
+	applyBtn.translatesAutoresizingMaskIntoConstraints = NO;
+	
+	
+	[NSLayoutConstraint constraintWithItem:applyBtn
+	attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+	toItem:resultPathField attribute:NSLayoutAttributeBottom
+	multiplier:1.0 constant:30].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:applyBtn
+	attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
+	toItem:nil attribute:NSLayoutAttributeHeight
+ 	multiplier:0 constant:40].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:applyBtn
+	attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeLeading
+	multiplier:1.0 constant:20].active = true;
+	
+	[NSLayoutConstraint constraintWithItem:applyBtn
+	attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual
+	toItem:self.view attribute:NSLayoutAttributeTrailing
+	multiplier:1.0 constant:-20].active = true;
+	
 }
 
 - (void)loadLabels {
@@ -348,10 +453,10 @@ PatchFormat currentFormat;
 }
 
 
-
+/*
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
-
+*/
 @end

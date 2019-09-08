@@ -1,6 +1,6 @@
 Package: com.wh0ba.xpatcher
 Name: xpatcher
-Version: 0.1
+Version: 0.3
 Architecture: iphoneos-arm
 Description: An awesome application!
 Maintainer: wh0ba
