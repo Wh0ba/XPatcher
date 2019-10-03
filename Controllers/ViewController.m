@@ -75,13 +75,13 @@ PatchFormat currentFormat;
 	self.navigationController.navigationBar.translucent = NO;
 	
 	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	/*
+	
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 	
 	[[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 
 	[[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-	*/
+	
 	UIBarButtonItem* clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(cleanFields)];
 	self.navigationItem.rightBarButtonItem = clearButton;
 	
@@ -274,7 +274,7 @@ PatchFormat currentFormat;
 		
 		if(errMsg == nil){
 			//[hud hideAnimated:YES];
-			[Aang alertWithTitle:@"Done" message:@"patch has been applied"];
+			[Aang alertWithTitle:@"Done" message:@"The patch has been applied"];
 			
 		}
 		else if(errMsg.IsWarning){
