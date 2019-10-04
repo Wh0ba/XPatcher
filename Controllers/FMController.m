@@ -88,8 +88,7 @@ static NSString *CellIdentifier = @"Cell";
 - (void)viewDidAppear:(BOOL)animated {
 	
 	[super viewDidAppear:animated];
-	
-	
+	[self reloadContent];
 }
 
 
