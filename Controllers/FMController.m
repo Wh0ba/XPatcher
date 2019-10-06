@@ -61,7 +61,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	
 	self.refreshControl = [[UIRefreshControl alloc] init];
-  [self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
+	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)viewDidLoad {
@@ -76,19 +76,23 @@ static NSString *CellIdentifier = @"Cell";
 //	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
 
 
-	[[NSNotificationCenter defaultCenter] 		addObserver:self
-	selector:@selector(reloadContent) 
+	[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(reloadContent) 
         name:kFMReloadContent
         object:nil];
-	
-	
+	[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(reloadContent) 
+        name:UIApplicationWillEnterForegroundNotification
+        object:nil];
+
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
-	
 	[super viewDidAppear:animated];
-	[self reloadContent];
+	// [self reloadContent];
 }
 
 
@@ -205,103 +209,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 
-#pragma mark -
-#pragma mark bookmarks
-/*
-- (void)addBookmarkAlert {
-	
-	UIAlertController *bookmarkAlert = [UIAlertController alertControllerWithTitle:@"Add Bookmark" message:nil preferredStyle:UIAlertControllerStyleAlert];
-
-	[bookmarkAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-
-            // Cancel button tappped.
-		[self dismissViewControllerAnimated:YES completion:^{}];
-	}]];
-	
-	[bookmarkAlert addTextFieldWithConfigurationHandler:^(UITextField *nameTF){
-		
-		nameTF.placeholder = @"bookmark Name";
-		nameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
-		nameTF.borderStyle = UITextBorderStyleRoundedRect;
-		nameTF.backgroundColor = Clear;
-		
-	}];
-	
-	
-	
-	[bookmarkAlert addAction:[UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	
-	NSString *name = bookmarkAlert.textFields[0].text;
-	
-	
-	[self addBookmarkWithName:name];
-	
-	[self dismissViewControllerAnimated:YES completion:^{}];
-	}]];
-	
-	
-	
-	
-	
-	
-// Present action sheet.
-	[self presentViewController:bookmarkAlert animated:YES completion:nil];
-	
-	
-	
-}
-
-
-
-- (void)addBookmarkWithName:(NSString*)name {
-	
-	
-	if (!name) {
-		name = currentURL.path.lastPathComponent;
-	}
-	if ([name isEqualToString:@""]) {
-		name = currentURL.path.lastPathComponent;
-	}
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	
-	NSData *serializedIn = [defaults objectForKey:@"bookmarks"];
-	NSMutableArray *bookmarks = [[NSKeyedUnarchiver unarchiveObjectWithData:serializedIn] mutableCopy];
-	
-	Bookmark *newbm = [self createBookmarkFromURL:currentURL name:name];
-	
-	
-	if (!bookmarks) {
-		
-		
-		bookmarks = [@[newbm] mutableCopy];
-		
-		
-	}else {
-		
-		[bookmarks addObject:newbm];
-		
-	}
-	
-	NSData *serialized = [NSKeyedArchiver archivedDataWithRootObject:bookmarks];
-	[defaults setObject:serialized forKey:@"bookmarks"];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:kBookmarksReload object:nil userInfo:nil];
-	
-}
-
-- (Bookmark*)createBookmarkFromURL:(NSURL*)url name:(NSString*)name{
-	
-	if (self.inAppDir) {
-		
-		return [[Bookmark alloc] initForAppWithName:name bundleID:self.appBundleID];
-		
-	}else {
-		return [[Bookmark alloc] initForNonAppWithName:name URL:url];
-	}
-}
-*/
 
 #pragma mark -
 #pragma mark Table View Data Source
@@ -332,8 +239,6 @@ static NSString *CellIdentifier = @"Cell";
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath { 
-	
-	//NSString *fileName = dirCon[indexPath.row];
 	
 	NSURL *fileURL = dirCon[indexPath.row];
 	
@@ -383,116 +288,100 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	
-	
-	//static NSString *fileName;
-	
 	NSURL *fileURL = dirCon[indexPath.row];
-	
 	
 	if (![fileManager fileExistsAtPath:fileURL.path isDirectory:nil]) {
 		[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
 		return;
 	}
 	
-	
 	NSNumber *isFile;
     [fileURL getResourceValue:&isFile forKey:NSURLIsRegularFileKey error:nil];
 	
 	
-		if (![isFile boolValue]) {
-			FMController *inside = [[FMController alloc] initWithPath:fileURL];
-			if (self.inAppDir) inside.inAppDir = YES;
-			[self.navigationController pushViewController:inside animated:YES];
-		}else {
+	if (![isFile boolValue]) {
+		FMController *inside = [[FMController alloc] initWithPath:fileURL];
+		if (self.inAppDir) inside.inAppDir = YES;
+		[self.navigationController pushViewController:inside animated:YES];
+	}else {
 		if (_forField) {
-			
-			if ([self.delegate conformsToProtocol:@protocol(FMDelegate)]) {
-				[self.delegate setURL:fileURL forFieldTag:targetTag];
-			}
-			
+			if ([self.delegate conformsToProtocol:@protocol(FMDelegate)]) [self.delegate setURL:fileURL forFieldTag:targetTag];
 			[self dismissViewControllerAnimated:YES completion:nil];
-			
 		}else {
-				[self actionsForFileAtURL:fileURL];
-				[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+			[self actionsForFileAtURL:fileURL];
+			[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 		}
-
-
-		}
-	
-	
+	}
 }
 
 
 #pragma mark -
 #pragma mark my methods
-/*
-- (void)setNav {
-	
-	
-	
-	UIBarButtonItem *addFav = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(buttonActions:)];
-	addFav.tag = 2;
-	
-	self.navigationItem.rightBarButtonItem = addFav;
-	
-	//UIBarButtonSystemItemSave
-	
-}
-*/
 - (void)buttonActions:(id)sender {
+
+	//int tg = [sender tag];
 	
-	int tg = [sender tag];
-	
-	switch (tg) {
+	switch ([sender tag]) {
 		case 1:
 			[self dismissViewControllerAnimated:YES completion:nil];
 			break; 
-		case 2: 
-			
-			//[self addBookmarkAlert];
-			
-			break;
 		default:
-			
 			break;
 	}
 }
 
 
 - (void)actionsForFileAtURL:(NSURL*)url {
-	
-	
-	UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:url.lastPathComponent message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-	[actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+	UIAlertController *actionSheet = [UIAlertController 
+		alertControllerWithTitle:url.lastPathComponent 
+		message:nil 
+		preferredStyle:UIAlertControllerStyleActionSheet];
 
-            // Cancel button tappped.
-		[self dismissViewControllerAnimated:YES completion:^{}];
-}]];
+	[actionSheet addAction:
+		[UIAlertAction 
+			actionWithTitle:@"Cancel" 
+			style:UIAlertActionStyleCancel 
+			handler:^(UIAlertAction *action) {
+				[self dismissViewControllerAnimated:YES completion:^{}];
+			}
+		]
+	];
 
-if ([Korra isPatchFileAtURL:url]) {
-
-[actionSheet addAction:[UIAlertAction actionWithTitle:@"set Patch" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	
-	NSDictionary *userInfo = @{@"fileURL":url,@"tag":@2};
-	[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
-	
-}]];
-}
-	else {
-		[actionSheet addAction:[UIAlertAction actionWithTitle:@"set ROM" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	
-			NSDictionary *userInfo = @{@"fileURL":url,@"tag":@1};
-			[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
-		
-		}]];
+	if ([Korra isPatchFileAtURL:url]) {
+		[actionSheet addAction:
+			[UIAlertAction 
+				actionWithTitle:@"set Patch" 
+				style:UIAlertActionStyleDefault 
+				handler:^(UIAlertAction *action) {
+					NSDictionary *userInfo = @{@"fileURL":url,@"tag":@2};
+					[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
+				}
+			]
+		];
 	}
-[actionSheet addAction:[UIAlertAction actionWithTitle:@"Open In" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	UIActivityViewController* OpenInVC =[[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
-	[self presentViewController:OpenInVC animated:YES completion:nil];
-}]];
+	else {
+		[actionSheet addAction:
+			[UIAlertAction 
+				actionWithTitle:@"set ROM" 
+				style:UIAlertActionStyleDefault 
+				handler:^(UIAlertAction *action) {
+					NSDictionary *userInfo = @{@"fileURL":url,@"tag":@1};
+					[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
+				}
+			]
+		];
+	}
+	[actionSheet addAction:
+		[UIAlertAction 
+			actionWithTitle:@"Open In" 
+			style:UIAlertActionStyleDefault 
+			handler:^(UIAlertAction *action) {
+				UIActivityViewController* OpenInVC =[[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+				[self presentViewController:OpenInVC animated:YES completion:nil];
+			}	
+		]
+	];
 
 /*
 [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open In Filza" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -500,35 +389,51 @@ if ([Korra isPatchFileAtURL:url]) {
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaPath]];
 }]];
 */
-if ([Korra isSafeDirAtURL:url]) {
-	
-	[actionSheet addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+	if ([Korra isSafeDirAtURL:url]) {
 		
-		
-		
-			UIAlertController *deleteAlert = [UIAlertController alertControllerWithTitle:@"Warning" message:[NSString stringWithFormat:@"are you sure you want to delete %@",url.lastPathComponent] preferredStyle:UIAlertControllerStyleAlert];
+		[actionSheet 
+			addAction:
+				[UIAlertAction 
+					actionWithTitle:@"Delete" 
+					style:UIAlertActionStyleDestructive 
+					handler:^(UIAlertAction *action) {	
+						UIAlertController *deleteAlert = [UIAlertController 
+															alertControllerWithTitle:@"Warning" 
+															message:[NSString stringWithFormat:@"are you sure you want to delete %@",url.lastPathComponent] 
+															preferredStyle:UIAlertControllerStyleAlert];
 
-			[deleteAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-				[self dismissViewControllerAnimated:YES completion:^{}];
-			}]];
-		
-			[deleteAlert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-				
-				NSError *erro;
-				
-				if (![fileManager removeItemAtURL:url error:&erro]) {
-					NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
-					[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];
+						[deleteAlert 
+							addAction:
+								[UIAlertAction 
+									actionWithTitle:@"Cancel" 
+										style:UIAlertActionStyleCancel 
+										handler:^(UIAlertAction *action) {
+										[self dismissViewControllerAnimated:YES completion:^{}];
+										}
+								]
+						];
 					
-				}else {
-					[self.view makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
-					[self reloadContent];
-				}
-				
-			}]];
-			
-			[self presentViewController:deleteAlert animated:YES completion:nil];
-			
+						[deleteAlert 
+							addAction:
+								[UIAlertAction 
+									actionWithTitle:@"Delete" 
+									style:UIAlertActionStyleDestructive 
+									handler:^(UIAlertAction *action) {
+										NSError *erro;
+										
+										if (![fileManager removeItemAtURL:url error:&erro]) {
+											NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
+											[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];	
+										}else {
+											[self.view makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
+											[self reloadContent];
+										}								
+									}
+								]
+						];
+					
+						[self presentViewController:deleteAlert animated:YES completion:nil];
+					
 		}]];
 } // if not inApp
 
