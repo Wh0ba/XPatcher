@@ -160,10 +160,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)loadContent {
 	
-	NSUInteger flag = showHiddenFiles ? 0 : NSDirectoryEnumerationSkipsHiddenFiles;
-	
-	
-	
+	NSUInteger flag = showHiddenFiles ? 0 : NSDirectoryEnumerationSkipsHiddenFiles;	
 	
 	NSArray *dirURLs = @[];
 	
@@ -206,6 +203,7 @@ static NSString *CellIdentifier = @"Cell";
 	[dirCon sortUsingComparator:^NSComparisonResult(NSURL* a, NSURL* b) {
 		return [a.path caseInsensitiveCompare:b.path];
 	}];;
+	dirURLs = nil;
 }
 
 
@@ -477,6 +475,20 @@ static NSString *CellIdentifier = @"Cell";
 
 	[[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 	
+
+	
+	UIBarButtonItem* importFilesButton = [[UIBarButtonItem alloc] 
+		initWithTitle:@"Import" 
+		style:UIBarButtonItemStylePlain 
+		target:self 
+		action:@selector(startUIDocumentPickerForImport)];
+	
+	self.navigationItem.rightBarButtonItem = importFilesButton;
+	
+}
+
+
+- (void)startUIDocumentPickerForImport {
 	
 }
 

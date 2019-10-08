@@ -67,6 +67,30 @@ PatchFormat currentFormat;
 	
 }
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	
+	[self loadFields];
+	[self loadButtons];
+	//[self loadLabels];
+	
+	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
+	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
+	
+}
+
+#pragma mark UI Methods
+
+- (void)cleanFields {
+	romPathField.text = nil;
+	romPathField.fileURL = nil;
+	patchPathField.text = nil;
+	patchPathField.fileURL = nil;
+	resultPathField.text = nil;
+	resultPathField.fileURL = nil;
+}
+
+
 - (void)navBarMagic {
 	
 	self.navigationController.navigationBar.barTintColor = kMelroseColor;
@@ -82,22 +106,18 @@ PatchFormat currentFormat;
 
 	[[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 	
-	UIBarButtonItem* clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(cleanFields)];
+	UIBarButtonItem* clearButton = [[UIBarButtonItem alloc] 
+		initWithTitle:@"Clear" 
+		style:UIBarButtonItemStylePlain 
+		target:self 
+		action:@selector(cleanFields)];
+	
 	self.navigationItem.rightBarButtonItem = clearButton;
 	
 }
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
-	
-	[self loadFields];
-	[self loadButtons];
-	//[self loadLabels];
-	
-	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
-	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
-	
-}
+
+#pragma mark loading UI
 
 - (void)loadFields {
 	
@@ -247,6 +267,8 @@ PatchFormat currentFormat;
 	
 }
 
+
+/*
 - (void)loadLabels {
 	
 	statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, SCR.height - 300, (SCR.width - 20), 30)];
@@ -255,50 +277,7 @@ PatchFormat currentFormat;
 	statusLabel.textColor = kFgcolor;
 	[SV addSubview:statusLabel];
 }
-
-- (void)applyPat {
-	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSString *romPath = [romPathField fileURL].path;
-	NSString *outputPath = [resultPathField fileURL].path;
-	NSString *patchPath = [patchPathField fileURL].path;
-	
-	if([fileManager fileExistsAtPath:patchPath]){
-		if([romPath length] > 0 && [outputPath length] > 0 && [patchPath length] > 0){
-			//statusLabel.text = @"Now patching...";
-	
-	MPPatchResult* errMsg = [self ApplyPatch:patchPath :romPath :outputPath];
-		//[activityIndicator stopAnimating];
-		//statusLabel.text = @"Ready";
-		
-		
-		if(errMsg == nil){
-			//[hud hideAnimated:YES];
-			[Aang alertWithTitle:@"Done" message:@"The patch has been applied"];
-			
-		}
-		else if(errMsg.IsWarning){
-			//[hud hideAnimated:YES];
-			
-			[Aang alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
-			errMsg = nil;
-		}else  {
-			[Aang alertWithTitle:@"Patching Failed" message:errMsg.Message];
-		}
-		
-		
-		}
-	}
-	else{
-		[Aang alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
-	}
-
-//kFMReloadContent
-	[[NSNotificationCenter defaultCenter] 
-       postNotificationName:kFMReloadContent
-        object:nil userInfo:nil];
-}
-
+*/
 
 
 
@@ -306,8 +285,7 @@ PatchFormat currentFormat;
 #pragma mark TextField Delegate
 
 
-- (BOOL)textField:(UITextField *)tf shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
+- (BOOL)textField:(UITextField *)tf shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
 	if (tf == romPathField | tf == patchPathField) {
 		return NO;
 	}
@@ -390,21 +368,13 @@ PatchFormat currentFormat;
 	
 }
 
-- (void)cleanFields {
-	
-	
-	romPathField.text = nil;
-	romPathField.fileURL = nil;
-	patchPathField.text = nil;
-	patchPathField.fileURL = nil;
-	resultPathField.text = nil;
-	resultPathField.fileURL = nil;
-	
-}
-
 
 #pragma mark -
 #pragma mark patching
+
+
+
+
 
 - (PatchFormat)detectPatchFormat:(NSString*)patchPath{
 	//I'm just going to look at the file extensions for now.
@@ -451,6 +421,52 @@ PatchFormat currentFormat;
     }
 	return retval;
 }
+
+
+- (void)applyPat {
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSString *romPath = [romPathField fileURL].path;
+	NSString *outputPath = [resultPathField fileURL].path;
+	NSString *patchPath = [patchPathField fileURL].path;
+	
+	if([fileManager fileExistsAtPath:patchPath]){
+		if([romPath length] > 0 && [outputPath length] > 0 && [patchPath length] > 0){
+			//statusLabel.text = @"Now patching...";
+	
+	MPPatchResult* errMsg = [self ApplyPatch:patchPath :romPath :outputPath];
+		//[activityIndicator stopAnimating];
+		//statusLabel.text = @"Ready";
+		
+		
+		if(errMsg == nil){
+			//[hud hideAnimated:YES];
+			[Aang alertWithTitle:@"Done" message:@"The patch has been applied"];
+			
+		}
+		else if(errMsg.IsWarning){
+			//[hud hideAnimated:YES];
+			
+			[Aang alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
+			errMsg = nil;
+		}else  {
+			[Aang alertWithTitle:@"Patching Failed" message:errMsg.Message];
+		}
+		
+		
+		}
+	}
+	else{
+		[Aang alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
+	}
+
+
+	[[NSNotificationCenter defaultCenter] 
+       postNotificationName:kFMReloadContent
+        object:nil userInfo:nil];
+}
+
+
 
 
 /*
