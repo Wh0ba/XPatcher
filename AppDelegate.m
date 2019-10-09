@@ -39,7 +39,7 @@
 	
 	if ([url isFileURL]) {
 		
-		[self copyFileAtPathToDocumentsDirectory:[url path]];
+		[self moveFileAtPathToDocumentsDirectory:[url path]];
 	}
 	return YES;
 }
@@ -49,7 +49,7 @@
 	
 	if ([url isFileURL])
 	{
-		[self copyFileAtPathToDocumentsDirectory:[url path]];
+		[self moveFileAtPathToDocumentsDirectory:[url path]];
 	}
 	/*else
 	{
@@ -58,13 +58,15 @@
 	return YES;
 }
 
-- (void)copyFileAtPathToDocumentsDirectory:(NSString *)filepath
+- (void)moveFileAtPathToDocumentsDirectory:(NSString *)filepath
 {
 	NSString *documentsDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
 	
 	NSString *filename = [filepath lastPathComponent];
 
 	NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
+
+	NSString *indexDir = [documentsDirectory stringByAppendingPathComponent:@"inbox"];
 
 	BOOL fileExists = NO;
 
@@ -83,6 +85,11 @@
 	}
 	
 	[[NSFileManager defaultManager] moveItemAtPath:filepath toPath:[documentsDirectory stringByAppendingPathComponent:filename] error:nil];
+
+	if ([[NSFileManager defaultManager] contentsOfDirectoryAtPath:indexDir error:nil].count <= 0) {
+		[[NSFileManager defaultManager] removeItemAtPath:indexDir error:nil];
+	}
+
 }
 
 
