@@ -5,7 +5,7 @@
 @end
 
 
-@interface FMController: UITableViewController <UIDocumentInteractionControllerDelegate>
+@interface FMController: UITableViewController <UIDocumentPickerDelegate>
 
 - (instancetype)initWithPath:(NSURL *)path;
 

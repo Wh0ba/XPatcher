@@ -41,61 +41,6 @@ static NSString *CellIdentifier = @"Cell";
 
 
 
-- (void)loadView {
-	
-	[super loadView];
-	
-	self.view.backgroundColor = kBgcolor;
-	
-	
-	fileManager = [NSFileManager defaultManager];
-	
-	Korra = [Avatar shared];
-	
-	showHiddenFiles = NO;
-	allowDeletingFromApps = NO;
-	
-	//self.tableView.allowEditing = NO;
-	
-	//[self setNav];
-	
-	
-	self.refreshControl = [[UIRefreshControl alloc] init];
-	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
-}
-
-- (void)viewDidLoad {
-	
-	[super viewDidLoad];
-	
-	
-	[self navBarMagic];
-	
-	[self loadContent];
-	
-//	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
-
-
-	[[NSNotificationCenter defaultCenter]
-		addObserver:self
-		selector:@selector(reloadContent) 
-        name:kFMReloadContent
-        object:nil];
-	[[NSNotificationCenter defaultCenter]
-		addObserver:self
-		selector:@selector(reloadContent) 
-        name:UIApplicationWillEnterForegroundNotification
-        object:nil];
-
-}
-
-
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-	// [self reloadContent];
-}
-
-
 
 #pragma mark -
 #pragma mark Initilizers
@@ -150,6 +95,63 @@ static NSString *CellIdentifier = @"Cell";
 	self.title = [path lastPathComponent];
 	
 	return self;
+}
+
+
+
+#pragma mark view loading
+- (void)loadView {
+	
+	[super loadView];
+	
+	self.view.backgroundColor = kBgcolor;
+	
+	
+	fileManager = [NSFileManager defaultManager];
+	
+	Korra = [Avatar shared];
+	
+	showHiddenFiles = NO;
+	allowDeletingFromApps = NO;
+	
+	//self.tableView.allowEditing = NO;
+	
+	//[self setNav];
+	
+	
+	self.refreshControl = [[UIRefreshControl alloc] init];
+	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)viewDidLoad {
+	
+	[super viewDidLoad];
+	
+	
+	[self navBarMagic];
+	
+	[self loadContent];
+	
+//	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
+
+
+	[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(reloadContent) 
+        name:kFMReloadContent
+        object:nil];
+	[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(reloadContent) 
+        name:UIApplicationWillEnterForegroundNotification
+        object:nil];
+
+}
+
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	// [self reloadContent];
 }
 
 
@@ -489,7 +491,14 @@ static NSString *CellIdentifier = @"Cell";
 
 
 - (void)startUIDocumentPickerForImport {
-	
+	 UIDocumentPickerViewController *documentPicker = 
+	 	[[UIDocumentPickerViewController alloc] 
+		 initWithDocumentTypes:@[@"public.data"]
+         inMode:UIDocumentPickerModeImport];
+    
+	documentPicker.delegate = self;
+    documentPicker.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self presentViewController:documentPicker animated:YES completion:nil];
 }
 
 
@@ -515,5 +524,63 @@ static NSString *CellIdentifier = @"Cell";
     return UIStatusBarStyleLightContent;
 }
 */
+
+
+
+
+
+
+
+
+
+#pragma mark UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+    if (controller.documentPickerMode == UIDocumentPickerModeImport) {
+		
+
+		NSMutableArray *pathComps = [[NSMutableArray alloc] init];
+		for (NSURL *URL in urls){
+			NSError *fileError;
+			
+			//NSString *URLPath = [URL.absoluteString stringByReplacingOccurrencesOfString:@"File:/" withString:@""];
+			// [fileManager moveItemAtPath:URL.path toPath:Korra.documentsDirectory.path error:&fileError];
+
+			NSData *fileData = [NSData dataWithContentsOfURL:URL];
+			NSString *newPath = [Korra.documentsDirectory.path stringByAppendingPathComponent:URL.lastPathComponent];
+			[fileData writeToFile:newPath options:NSDataWritingWithoutOverwriting error:&fileError];
+			if (fileError) {
+				[Korra alertWithTitle:@"Importing Error" message:[NSString stringWithFormat:@"%@, url: %@",[fileError localizedDescription], URL.description]];
+				continue;
+			}
+			fileData = nil;
+			
+			[pathComps addObject:URL.path];
+
+			NSError *fileDeleteError;
+			[fileManager removeItemAtURL:URL error:&fileDeleteError];
+		}
+
+
+		
+		if (pathComps.count <= 0) return; 
+		NSString *importedFiles = [pathComps componentsJoinedByString:@","];
+		
+
+        NSString *alertMessage = [NSString stringWithFormat:@"Successfully imported %@", importedFiles];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Import"
+                                                  message:alertMessage
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alertController animated:YES completion:nil];
+        });
+	
+    }
+}
+
+
+
 
 @end
