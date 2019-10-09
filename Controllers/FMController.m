@@ -555,7 +555,7 @@ static NSString *CellIdentifier = @"Cell";
 			}
 			fileData = nil;
 			
-			[pathComps addObject:URL.path];
+			[pathComps addObject:URL.lastPathComponent];
 
 			NSError *fileDeleteError;
 			[fileManager removeItemAtURL:URL error:&fileDeleteError];
@@ -564,18 +564,19 @@ static NSString *CellIdentifier = @"Cell";
 
 		
 		if (pathComps.count <= 0) return; 
-		NSString *importedFiles = [pathComps componentsJoinedByString:@","];
+		//NSString *importedFiles = [pathComps componentsJoinedByString:@","];
 		
 
-        NSString *alertMessage = [NSString stringWithFormat:@"Successfully imported %@", importedFiles];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertController *alertController = [UIAlertController
-                                                  alertControllerWithTitle:@"Import"
-                                                  message:alertMessage
-                                                  preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alertController animated:YES completion:nil];
-        });
+		//NSString *alertMessage = [NSString stringWithFormat:@"Successfully imported %@", importedFiles];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			// UIAlertController *alertController = [UIAlertController
+			//                                       alertControllerWithTitle:@"Import"
+			//                                       message:alertMessage
+			//                                       preferredStyle:UIAlertControllerStyleAlert];
+			// [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+			// [self presentViewController:alertController animated:YES completion:nil];
+			[self reloadContent];
+		});
 	
     }
 }
