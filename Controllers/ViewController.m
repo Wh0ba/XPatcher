@@ -59,7 +59,7 @@ PatchFormat currentFormat;
 	self.view.backgroundColor = kBgcolor;
 	[[UIApplication sharedApplication] keyWindow].tintColor = kMelroseColor;
 	
-	self.title = @"XPatcher";
+	self.title = @"Patcher";
 	
 	[self navBarMagic];
 	

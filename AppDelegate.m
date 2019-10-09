@@ -21,10 +21,18 @@
 	UINavigationController *docsVC = [[UINavigationController alloc] initWithRootViewController:[[FMController alloc] initWithPath:[[Avatar shared] documentsDirectory]]];
 	
 	UITabBarController *tabC = [[UITabBarController alloc] init];
-	[tabC setViewControllers:@[mainVC, docsVC]];
 	
+	[tabC setViewControllers:@[mainVC, docsVC]];
+
+	tabC.tabBar.barTintColor = [UIColor colorWithRed:1 green:0.36 blue:0.36 alpha:1]; //Melrose
+	tabC.tabBar.translucent = NO;
+	tabC.tabBar.tintColor = [UIColor whiteColor];
+	tabC.tabBar.unselectedItemTintColor = [UIColor colorWithRed:0 green:0.1 blue:0.174 alpha:1];
+
+
+
 	mainVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Patcher" image:[UIImage imageNamed:@"icons/patch.png"] tag:200];
-	docsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Documents" image:[UIImage imageNamed:@"icons/docs.png"] tag:201];
+	docsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Documents" image:[UIImage imageNamed:@"icons/FilesTab-Unselected.png"] selectedImage:[UIImage imageNamed:@"icons/FilesTab-Selected.png"]];
 	
 	window.rootViewController = tabC;
 	[window makeKeyAndVisible];
