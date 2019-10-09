@@ -13,6 +13,11 @@ typedef enum PatchTypes{
 	UNKNOWNPAT, UPSPAT, XDELTAPAT, IPSPAT, PPFPAT, BSDIFFPAT, BPSPAT, BPSDELTA, RUPPAT
 } PatchFormat;
 
+typedef enum{
+	XPThemeLight = 1,
+	XPThemeDark
+} XPTheme;
+
 
 PatchFormat currentFormat;
 @interface ViewController()
@@ -73,7 +78,8 @@ PatchFormat currentFormat;
 	[self loadFields];
 	[self loadButtons];
 	//[self loadLabels];
-	
+	[self applyTheme:XPThemeDark];
+
 	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	
@@ -125,19 +131,24 @@ PatchFormat currentFormat;
 	romPathField.placeholder = @"Waiting for a ROM";
 	romPathField.tag = 1;
 	
+	romPathField.clipsToBounds = true;
+
 	romPathField.delegate = self;
 	
 	patchPathField = [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(romPathField)), (SCR.width - 40), kDefH)]; 
 	patchPathField.tag = 2;
-	patchPathField.placeholder = @"Waiting for a Patch file";
+	patchPathField.placeholder = @"Waiting for a patch file";
 	patchPathField.delegate = self;
 	
+	patchPathField.clipsToBounds = true;
+
 	resultPathField = [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(patchPathField)), (SCR.width - 40), kDefH)];
 	
-	resultPathField.placeholder = @"Result File";
+	resultPathField.placeholder = @"Type result file name";
 	resultPathField.delegate = self;
 	resultPathField.tag = 5;
 	
+	resultPathField.clipsToBounds = true;
 	
 	[SV addSubview:resultPathField];
 	[SV addSubview:romPathField];
@@ -180,7 +191,7 @@ PatchFormat currentFormat;
 	[NSLayoutConstraint constraintWithItem:patchPathField
 	attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
 	toItem:romPathField attribute:NSLayoutAttributeBottom
-	multiplier:1.0 constant:20].active = true;
+	multiplier:1.0 constant:5].active = true;
 	
 	[NSLayoutConstraint constraintWithItem:patchPathField
 	attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
@@ -238,6 +249,7 @@ PatchFormat currentFormat;
 	applyBtn.backgroundColor = kMelroseColor;
 	applyBtn.layer.cornerRadius = 7;
 	applyBtn.clipsToBounds = YES;
+
 	applyBtn.frame = CGRectMake(20, (sumPosOf(viewTag(5)) + 30), (SCR.width - 40), 40);
 	
 	[SV addSubview:applyBtn];
@@ -279,7 +291,57 @@ PatchFormat currentFormat;
 }
 */
 
+- (void)applyTheme:(XPTheme)theme {
+	if (theme == XPThemeLight){
 
+	}else if (theme == XPThemeDark){
+
+
+		UIColor *blackColor = [UIColor blackColor];
+		UIColor *placeholderColor = [UIColor colorWithWhite:1 alpha:0.5];
+
+		self.view.backgroundColor = blackColor;
+
+		applyBtn.backgroundColor = blackColor;
+		[applyBtn setTitleColor:kMelroseColor forState:UIControlStateNormal];
+		applyBtn.layer.borderWidth = 2;
+		applyBtn.layer.borderColor = kMelroseColor.CGColor;
+
+		romPathField.backgroundColor = blackColor;
+		romPathField.layer.cornerRadius = 7;
+		romPathField.layer.borderWidth = 1;
+		romPathField.layer.borderColor = kMelroseColor.CGColor;
+		romPathField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Waiting for a ROM" attributes:@{NSForegroundColorAttributeName: placeholderColor}];
+
+		patchPathField.backgroundColor = blackColor;
+		patchPathField.layer.cornerRadius = 7;
+		patchPathField.layer.borderWidth = 1;
+		patchPathField.layer.borderColor = kMelroseColor.CGColor;
+		patchPathField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Waiting for a patch file" attributes:@{NSForegroundColorAttributeName: placeholderColor}];
+
+
+		resultPathField.backgroundColor = blackColor;
+		resultPathField.layer.cornerRadius = 7;
+		resultPathField.layer.borderWidth = 2;
+		resultPathField.layer.borderColor = kMelroseColor.CGColor;		
+		resultPathField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Type result file name" attributes:@{NSForegroundColorAttributeName: placeholderColor}];
+
+
+		self.navigationController.navigationBar.barTintColor = blackColor;
+
+		self.navigationController.navigationBar.tintColor = kMelroseColor;
+		
+		[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:kMelroseColor}];
+
+		if (self.tabBarController.tabBar){
+			self.tabBarController.tabBar.barTintColor = blackColor;
+			self.tabBarController.tabBar.tintColor = kMelroseColor;
+			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+		}
+
+
+	}
+}
 
 #pragma mark -
 #pragma mark TextField Delegate
