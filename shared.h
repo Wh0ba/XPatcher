@@ -15,6 +15,10 @@
 
 
 
+typedef enum{
+	XPThemeLight = 1,
+	XPThemeDark
+} XPTheme;
 
 
 #define kFMReloadContent @"FM.ReloadContent"

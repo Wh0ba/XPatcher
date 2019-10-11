@@ -7,16 +7,10 @@
 #define sumPosOf(x) ((x.FO.y + x.FS.height) + 20)
 #define viewTag(x) [SV viewWithTag:x]
 
-
-
 typedef enum PatchTypes{
 	UNKNOWNPAT, UPSPAT, XDELTAPAT, IPSPAT, PPFPAT, BSDIFFPAT, BPSPAT, BPSDELTA, RUPPAT
 } PatchFormat;
 
-typedef enum{
-	XPThemeLight = 1,
-	XPThemeDark
-} XPTheme;
 
 
 PatchFormat currentFormat;
@@ -24,6 +18,7 @@ PatchFormat currentFormat;
 
 @property (nonatomic, strong) UIButton *applyBtn;
 @property (nonatomic, strong) UILabel *statusLabel;
+@property (nonatomic) XPTheme currentTheme;
 
 @end
 
@@ -32,7 +27,7 @@ PatchFormat currentFormat;
 @implementation ViewController {
 	Avatar *Aang;
 }
-@synthesize resultPathField, romPathField, patchPathField, applyBtn ,statusLabel;
+@synthesize resultPathField, romPathField, patchPathField, applyBtn ,statusLabel, currentTheme;
 
 
 - (id)init {
@@ -64,11 +59,11 @@ PatchFormat currentFormat;
 	self.view.backgroundColor = kBgcolor;
 	[[UIApplication sharedApplication] keyWindow].tintColor = kMelroseColor;
 	
-	self.title = @"Patcher";
+	self.title = @"XPatcher";
 	
 	[self navBarMagic];
 	
-	
+	currentTheme = XPThemeDark;	
 	
 }
 
@@ -78,7 +73,7 @@ PatchFormat currentFormat;
 	[self loadFields];
 	[self loadButtons];
 	//[self loadLabels];
-	[self applyTheme:XPThemeDark];
+	[self applyTheme:currentTheme];
 
 	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -293,6 +288,16 @@ PatchFormat currentFormat;
 
 - (void)applyTheme:(XPTheme)theme {
 	if (theme == XPThemeLight){
+
+
+
+
+
+		if (self.tabBarController.tabBar){
+			self.tabBarController.tabBar.barTintColor = kMelroseColor;
+			self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
+			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+		}
 
 	}else if (theme == XPThemeDark){
 

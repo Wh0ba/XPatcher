@@ -22,6 +22,7 @@ static NSString *CellIdentifier = @"Cell";
 @property (nonatomic, assign) BOOL inAppDir;
 @property (nonatomic, assign) NSString *appBundleID;
 @property (nonatomic, assign) BOOL allowDeletingFromApps;
+@property (nonatomic, assign) XPTheme currentTheme;
 
 @end
 
@@ -37,7 +38,7 @@ static NSString *CellIdentifier = @"Cell";
 	Avatar *Korra;
 	
 }
-@synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
+@synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps, currentTheme;
 
 
 
@@ -118,7 +119,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	//[self setNav];
 	
-	
+	currentTheme = XPThemeDark;	
 	self.refreshControl = [[UIRefreshControl alloc] init];
 	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
 }
@@ -131,7 +132,9 @@ static NSString *CellIdentifier = @"Cell";
 	[self navBarMagic];
 	
 	[self loadContent];
-	
+
+
+	[self applyTheme:currentTheme];
 //	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
 
 
@@ -232,8 +235,8 @@ static NSString *CellIdentifier = @"Cell";
 	
 	cell.textLabel.numberOfLines = 0;
 	
-	cell.textLabel.textColor = Black;
-	
+	cell.textLabel.textColor = currentTheme == XPThemeDark ? White : Black;
+	cell.contentView.backgroundColor = [UIColor clearColor];	
 	return cell;
 }
 
@@ -582,6 +585,40 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 
+- (void)applyTheme:(XPTheme)theme {
+	if (theme == XPThemeLight){
+
+
+
+
+
+		if (self.tabBarController.tabBar){
+			self.tabBarController.tabBar.barTintColor = kMelroseColor;
+			self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
+			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+		}
+
+	}else if (theme == XPThemeDark){
+
+
+		UIColor *backgroundColor = [UIColor blackColor];
+		self.view.backgroundColor = backgroundColor;
+
+		self.navigationController.navigationBar.barTintColor = backgroundColor;
+
+		self.navigationController.navigationBar.tintColor = kMelroseColor;
+		
+		[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:kMelroseColor}];
+
+		if (self.tabBarController.tabBar){
+			self.tabBarController.tabBar.barTintColor = backgroundColor;
+			self.tabBarController.tabBar.tintColor = kMelroseColor;
+			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+		}
+
+
+	}
+}
 
 
 @end
