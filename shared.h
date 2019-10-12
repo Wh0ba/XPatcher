@@ -16,7 +16,7 @@
 
 
 
-
+#define kFMChangeTheme @"FM.Change_Theme"
 #define kFMReloadContent @"FM.ReloadContent"
 
 #define kBgcolor [UIColor whiteColor]

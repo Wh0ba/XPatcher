@@ -1,4 +1,4 @@
-
+#import "../defs.h"
 
 
 @interface Avatar: NSObject {
@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UIImage *folderIcon;
 @property (nonatomic, retain) NSFileManager *fileManager;
 @property (nonatomic, strong) NSArray *notOkPaths;
+@property (nonatomic) XPTheme currentTheme;
 
 + (id)shared;
 

@@ -23,7 +23,6 @@ static NSString *CellIdentifier = @"Cell";
 @property (nonatomic, assign) BOOL inAppDir;
 @property (nonatomic, assign) NSString *appBundleID;
 @property (nonatomic, assign) BOOL allowDeletingFromApps;
-@property (nonatomic, assign) XPTheme currentTheme;
 
 @end
 
@@ -35,11 +34,9 @@ static NSString *CellIdentifier = @"Cell";
 	
 	//id parent, target;
 	int targetTag;// 1 = rom , 2 = patch
-	
-	Avatar *Korra;
-	
+ Avatar *Korra;	
 }
-@synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps, currentTheme;
+@synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
 
 
 
@@ -105,22 +102,22 @@ static NSString *CellIdentifier = @"Cell";
 - (void)loadView {
 	
 	[super loadView];
-	
+	Korra = [Avatar shared];	
 	self.view.backgroundColor = kBgcolor;
 	
 	
 	fileManager = [NSFileManager defaultManager];
 	
-	Korra = [Avatar shared];
 	
-	showHiddenFiles = NO;
+	showHiddenFiles = YES;
 	allowDeletingFromApps = NO;
 	
+	[self navBarMagic];
+	[self applyTheme:Korra.currentTheme];
 	//self.tableView.allowEditing = NO;
 	
 	//[self setNav];
 	
-	currentTheme = XPThemeDark;	
 	self.refreshControl = [[UIRefreshControl alloc] init];
 	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
 }
@@ -130,12 +127,10 @@ static NSString *CellIdentifier = @"Cell";
 	[super viewDidLoad];
 	
 	
-	[self navBarMagic];
 	
 	[self loadContent];
 
 
-	[self applyTheme:currentTheme];
 //	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
 
 
@@ -149,7 +144,11 @@ static NSString *CellIdentifier = @"Cell";
 		selector:@selector(reloadContent) 
         name:UIApplicationWillEnterForegroundNotification
         object:nil];
-
+	[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(changeTheme) 
+        name:kFMChangeTheme
+        object:nil];
 }
 
 
@@ -236,8 +235,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	cell.textLabel.numberOfLines = 0;
 	
-	cell.textLabel.textColor = currentTheme == XPThemeDark ? White : Black;
-	cell.contentView.backgroundColor = [UIColor clearColor];	
+	cell.textLabel.textColor = Korra.currentTheme == XPThemeDark ? White : Black;
 	return cell;
 }
 
@@ -250,7 +248,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	cell.contentView.backgroundColor = [UIColor clearColor];
 	cell.backgroundColor = [UIColor clearColor];
-	
+	cell.textLabel.textColor = Korra.currentTheme == XPThemeDark ? White : Black;
 	
 	NSNumber* isFile;
     [fileURL getResourceValue:&isFile forKey:NSURLIsRegularFileKey error:nil];
@@ -574,6 +572,16 @@ static NSString *CellIdentifier = @"Cell";
 		});
 	
     }
+}
+
+- (void) changeTheme {
+	if (Korra.currentTheme == XPThemeDark){
+		[self applyTheme:XPThemeLight];
+		Korra.currentTheme = XPThemeLight;
+	}else if (Korra.currentTheme == XPThemeLight){
+		[self applyTheme:XPThemeDark];
+		Korra.currentTheme = XPThemeDark;
+	}
 }
 
 

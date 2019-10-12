@@ -1,5 +1,5 @@
 
-typedef enum{
+typedef enum {
 	XPThemeLight = 1,
 	XPThemeDark
 } XPTheme;
@@ -7,6 +7,9 @@ typedef enum{
 
 #define kMelroseColor [UIColor colorWithRed:1 green:0.36 blue:0.36 alpha:1]
 
+
+
+//#define Korra [Avatar shared]
 
 
 #pragma mark colors

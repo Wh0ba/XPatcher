@@ -1,6 +1,4 @@
 #import "Avatar.h"
-//#import "../shared.h"
-//#import <LSApplicationWorkspace.h>
 
 @implementation Avatar
 
@@ -25,6 +23,7 @@
 		if (!documentsDirectory) documentsDirectory = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0]];
 		
 		fileManager = [NSFileManager defaultManager];
+		self.currentTheme = XPThemeDark;
 	}
 	return self;
 }
@@ -155,8 +154,6 @@
 
 
 - (NSString *)fileSizeAtFullPath:(NSURL *)fullPath {
-	
-	 
 	
 	NSError *error;
 	NSDictionary *fileAttr = [fileManager attributesOfItemAtPath:fullPath.path error:&error]; 

@@ -19,16 +19,15 @@ PatchFormat currentFormat;
 
 @property (nonatomic, strong) UIButton *applyBtn;
 @property (nonatomic, strong) UILabel *statusLabel;
-@property (nonatomic) XPTheme currentTheme;
 
 @end
 
 
 
 @implementation ViewController {
-	Avatar *Aang;
+	Avatar *Korra;
 }
-@synthesize resultPathField, romPathField, patchPathField, applyBtn ,statusLabel, currentTheme;
+@synthesize resultPathField, romPathField, patchPathField, applyBtn ,statusLabel;
 
 
 - (id)init {
@@ -36,13 +35,11 @@ PatchFormat currentFormat;
 	self = [super init];
 	if (!self) return nil;
 	
-	
+	Korra = [Avatar shared];	
 	[[NSNotificationCenter defaultCenter] addObserver:self
         selector:@selector(setFileURL:) 
         name:kSetFileNotification
         object:nil];
-	Aang = [Avatar shared];
-	
 	
 	return self;
 }
@@ -64,16 +61,15 @@ PatchFormat currentFormat;
 	
 	[self navBarMagic];
 	[self setupNavButtons];
-	currentTheme = XPThemeDark;
 	
 	[self loadFields];
 	[self loadButtons];
+	[self applyTheme:Korra.currentTheme];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	//[self loadLabels];
-	[self applyTheme:currentTheme];
 	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	
@@ -127,13 +123,14 @@ PatchFormat currentFormat;
 	self.navigationItem.leftBarButtonItem = themeButton;
 }
 - (void) changeTheme {
-	if (currentTheme == XPThemeDark){
+	if (Korra.currentTheme == XPThemeDark){
 		[self applyTheme:XPThemeLight];
-		currentTheme = XPThemeLight;
-	}else {
+		Korra.currentTheme = XPThemeLight;
+	}else if (Korra.currentTheme == XPThemeLight){
 		[self applyTheme:XPThemeDark];
-		currentTheme = XPThemeDark;
+		Korra.currentTheme = XPThemeDark;
 	}
+	
 }
 #pragma mark loading UI
 
@@ -347,7 +344,9 @@ PatchFormat currentFormat;
 				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
 				}
 			}
-	
+	[[NSNotificationCenter defaultCenter] 
+       postNotificationName:kFMChangeTheme
+        object:nil userInfo:nil];
 
 }
 
@@ -371,7 +370,7 @@ PatchFormat currentFormat;
 	
 	if (tF.tag == 5) {
 		if ([tF.text isEqualToString:@""] || !tF.text){
-		newURL = [NSURL fileURLWithPath:[[Aang documentsDirectory].path stringByAppendingPathComponent:tF.text] isDirectory:NO];
+		newURL = [NSURL fileURLWithPath:[[Korra documentsDirectory].path stringByAppendingPathComponent:tF.text] isDirectory:NO];
 		}else {
 			if (tF.fileURL) {
 				
@@ -422,7 +421,7 @@ PatchFormat currentFormat;
 		
 		if ([newStr rangeOfString:@"/var/mobile/Containers/" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 		NSString *fileName = newStr.lastPathComponent;
-		newStr = [Aang.documentsDirectory.path stringByAppendingPathComponent:fileName];
+		newStr = [Korra.documentsDirectory.path stringByAppendingPathComponent:fileName];
 		
 		
 		}
@@ -511,23 +510,23 @@ PatchFormat currentFormat;
 		
 		if(errMsg == nil){
 			//[hud hideAnimated:YES];
-			[Aang alertWithTitle:@"Done" message:@"The patch has been applied"];
+			[Korra alertWithTitle:@"Done" message:@"The patch has been applied"];
 			
 		}
 		else if(errMsg.IsWarning){
 			//[hud hideAnimated:YES];
 			
-			[Aang alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
+			[Korra alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
 			errMsg = nil;
 		}else  {
-			[Aang alertWithTitle:@"Patching Failed" message:errMsg.Message];
+			[Korra alertWithTitle:@"Patching Failed" message:errMsg.Message];
 		}
 		
 		
 		}
 	}
 	else{
-		[Aang alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
+		[Korra alertWithTitle:@"Not ready yet" message:@"All of the files above must be vaild before patching is possible."];
 	}
 
 
