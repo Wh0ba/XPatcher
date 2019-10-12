@@ -15,10 +15,6 @@
 
 
 
-typedef enum{
-	XPThemeLight = 1,
-	XPThemeDark
-} XPTheme;
 
 
 #define kFMReloadContent @"FM.ReloadContent"
@@ -26,7 +22,6 @@ typedef enum{
 #define kBgcolor [UIColor whiteColor]
 #define kFgcolor [UIColor blackColor]
 
-#define kMelroseColor [UIColor colorWithRed:1 green:0.36 blue:0.36 alpha:1]
 
 
 #define kDefPatchColor [UIColor colorWithRed:0.7 green:0 blue:1 alpha:1]
@@ -65,15 +60,6 @@ typedef enum{
 #define ALblWid(x) [x.text sizeWithFont:x.font].width
 
 
-#pragma mark colors
-
-#define Black [UIColor blackColor]
-#define Red [UIColor redColor]
-#define Green [UIColor greenColor]
-#define Blue [UIColor blueColor]
-#define White [UIColor whiteColor]
-#define Clear [UIColor clearColor]
-#define Cyan [UIColor cyanColor]
 
 
 

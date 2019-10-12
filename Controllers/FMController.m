@@ -1,4 +1,5 @@
 #import "../shared.h"
+#import "../defs.h"
 #import "FMController.h"
 
 
@@ -446,22 +447,13 @@ static NSString *CellIdentifier = @"Cell";
 
 
 - (void) reloadContent {
-	
-	
 	[self loadContent];
-	
 	[self.tableView reloadData];
-	
-	
 }
 
 - (void)pulledToRefresh {
-	
 	[self reloadContent];
 	[self.refreshControl endRefreshing];
-	
-	
-	
 }
 
 
@@ -469,8 +461,8 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)navBarMagic {
 	
-	self.navigationController.navigationBar.barTintColor = kMelroseColor;
-	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+	//self.navigationController.navigationBar.barTintColor = kMelroseColor;
+	//self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.translucent = NO;
 	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
@@ -590,12 +582,18 @@ static NSString *CellIdentifier = @"Cell";
 
 
 
+		self.view.backgroundColor = White;
+
+		self.navigationController.navigationBar.barTintColor = kMelroseColor;
+
+		self.navigationController.navigationBar.tintColor = White;
+
 
 
 		if (self.tabBarController.tabBar){
 			self.tabBarController.tabBar.barTintColor = kMelroseColor;
 			self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
-			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.5 alpha:1];
 		}
 
 	}else if (theme == XPThemeDark){
@@ -608,16 +606,15 @@ static NSString *CellIdentifier = @"Cell";
 
 		self.navigationController.navigationBar.tintColor = kMelroseColor;
 		
-		[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:kMelroseColor}];
+		[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:White}];
 
 		if (self.tabBarController.tabBar){
 			self.tabBarController.tabBar.barTintColor = backgroundColor;
 			self.tabBarController.tabBar.tintColor = kMelroseColor;
 			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
 		}
-
-
 	}
+	[self reloadContent];
 }
 
 
