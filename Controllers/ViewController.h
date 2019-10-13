@@ -1,5 +1,5 @@
 #import "FMController.h"
-
+#import "SettingsVC.h"
 @class txtField;
 
 @interface ViewController : UIViewController <UITextFieldDelegate, FMDelegate>

@@ -121,13 +121,33 @@ PatchFormat currentFormat;
 	
 	self.navigationItem.rightBarButtonItem = clearButton;
 
-	UIBarButtonItem* themeButton = [[UIBarButtonItem alloc] 
-		initWithTitle:@"Theme" 
-		style:UIBarButtonItemStylePlain 
-		target:self 
-		action:@selector(changeTheme)];
-	self.navigationItem.leftBarButtonItem = themeButton;
+	// UIBarButtonItem* themeButton = [[UIBarButtonItem alloc] 
+	// 	initWithTitle:@"Theme" 
+	// 	style:UIBarButtonItemStylePlain 
+	// 	target:self 
+	// 	action:@selector(changeTheme)];
+	// self.navigationItem.leftBarButtonItem = themeButton;
+    UIBarButtonItem* settingsButton = [[UIBarButtonItem alloc] 
+        initWithTitle:@"More" 
+        style:UIBarButtonItemStylePlain 
+        target:self 
+        action:@selector(openSettings)];
+	
+	// UIFont *f1 = [UIFont fontWithName:@"Helvetica" size:24.0]; 
+	// NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:f1, UITextAttributeFont, nil]; 
+	// [settingsButton setTitleTextAttributes:dict forState:UIControlStateNormal];
+	
+	self.navigationItem.leftBarButtonItem = settingsButton;
+    	
 }
+
+- (void)openSettings {
+	UINavigationController *SettingsPage = [[UINavigationController alloc] initWithRootViewController:[[SettingsVC alloc] init]];
+	[self presentViewController:SettingsPage animated:YES completion:nil];
+}
+
+
+
 - (void) changeTheme {
 	if (Korra.currentTheme == XPThemeDark){
 		[Korra setTheme:XPThemeLight];
