@@ -1,10 +1,13 @@
 #import "Avatar.h"
 
-@implementation Avatar
+@implementation Avatar {
+	NSUserDefaults *defaults;
+	
+}
 
 @synthesize documentsDirectory, fileManager;
 
-
+static NSString *const themeKey = @"XPatcher.currentTheme";
 #pragma mark Singleton Methods
 
 + (id)shared {
@@ -23,7 +26,8 @@
 		if (!documentsDirectory) documentsDirectory = [NSURL URLWithString:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)[0]];
 		
 		fileManager = [NSFileManager defaultManager];
-		self.currentTheme = XPThemeDark;
+		defaults = [NSUserDefaults standardUserDefaults];
+		self.currentTheme = [defaults integerForKey:themeKey] ?: XPThemeDark;
 	}
 	return self;
 }
@@ -43,6 +47,16 @@
 	}
 	
 	return _fileIcon;
+}
+
+
+- (void)setTheme:(XPTheme)theme {
+	self.currentTheme = theme;
+	[defaults setInteger:theme forKey:themeKey];
+	
+	[[NSNotificationCenter defaultCenter] 
+       postNotificationName:kChangeThemeNotification
+        object:nil userInfo:nil];
 }
 
 - (void)alertWithTitle:(NSString *)tot message:(NSString *)mes 

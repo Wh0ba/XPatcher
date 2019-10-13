@@ -64,7 +64,7 @@ PatchFormat currentFormat;
 	
 	[self loadFields];
 	[self loadButtons];
-	[self applyTheme:Korra.currentTheme];
+	[self applyTheme];
 }
 
 - (void)viewDidLoad {
@@ -72,7 +72,13 @@ PatchFormat currentFormat;
 	//[self loadLabels];
 	romPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
 	patchPathField.inputView = [[UIView alloc] initWithFrame:CGRectZero];
-	
+
+
+	[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(applyTheme) 
+        name:kChangeThemeNotification
+        object:nil];
 }
 
 #pragma mark UI Methods
@@ -124,11 +130,14 @@ PatchFormat currentFormat;
 }
 - (void) changeTheme {
 	if (Korra.currentTheme == XPThemeDark){
-		[self applyTheme:XPThemeLight];
-		Korra.currentTheme = XPThemeLight;
+		[Korra setTheme:XPThemeLight];
+		// [self applyTheme:XPThemeLight];
+		// Korra.currentTheme = XPThemeLight;
 	}else if (Korra.currentTheme == XPThemeLight){
-		[self applyTheme:XPThemeDark];
-		Korra.currentTheme = XPThemeDark;
+		[Korra setTheme:XPThemeDark];
+
+		// [self applyTheme:XPThemeDark];
+		// Korra.currentTheme = XPThemeDark;
 	}
 	
 }
@@ -302,17 +311,19 @@ PatchFormat currentFormat;
 }
 */
 
-- (void)applyTheme:(XPTheme)theme {
+- (void)applyTheme{
 
-		if (theme == XPThemeLight){
+		if (Korra.currentTheme == XPThemeLight){
 
 			self.view.backgroundColor = White;
 			
 			applyBtn.backgroundColor = kMelroseColor;
 			[applyBtn setTitleColor:White forState:UIControlStateNormal];
+
 			[romPathField applyTheme:XPThemeLight];
 			[patchPathField applyTheme:XPThemeLight];
 			[resultPathField applyTheme:XPThemeLight];
+			
 			self.navigationController.navigationBar.barTintColor = kMelroseColor;
 			self.navigationController.navigationBar.tintColor = White;
 
@@ -321,7 +332,7 @@ PatchFormat currentFormat;
 				self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
 				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
 			}
-		}else if (theme == XPThemeDark){
+		}else if (Korra.currentTheme == XPThemeDark){
 
 
 			UIColor *blackColor = [UIColor blackColor];
@@ -344,9 +355,9 @@ PatchFormat currentFormat;
 				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
 				}
 			}
-	[[NSNotificationCenter defaultCenter] 
-       postNotificationName:kFMChangeTheme
-        object:nil userInfo:nil];
+	// [[NSNotificationCenter defaultCenter] 
+    //    postNotificationName:kChangeThemeNotification
+    //     object:nil userInfo:nil];
 
 }
 

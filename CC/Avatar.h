@@ -28,5 +28,6 @@
 
 - (BOOL)isROMFileAtURL:(NSURL*)file;
 
+- (void)setTheme:(XPTheme)theme;
 
 @end

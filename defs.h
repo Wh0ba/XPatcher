@@ -7,6 +7,8 @@ typedef enum {
 
 #define kMelroseColor [UIColor colorWithRed:1 green:0.36 blue:0.36 alpha:1]
 
+#define kChangeThemeNotification @"XPatcher.Controllers.Change_Theme"
+#define kFMReloadContent @"FM.ReloadContent"
 
 
 //#define Korra [Avatar shared]

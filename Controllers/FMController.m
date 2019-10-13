@@ -113,7 +113,7 @@ static NSString *CellIdentifier = @"Cell";
 	allowDeletingFromApps = NO;
 	
 	[self navBarMagic];
-	[self applyTheme:Korra.currentTheme];
+	[self applyTheme];
 	//self.tableView.allowEditing = NO;
 	
 	//[self setNav];
@@ -146,8 +146,8 @@ static NSString *CellIdentifier = @"Cell";
         object:nil];
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
-		selector:@selector(changeTheme) 
-        name:kFMChangeTheme
+		selector:@selector(applyTheme) 
+        name:kChangeThemeNotification
         object:nil];
 }
 
@@ -574,19 +574,19 @@ static NSString *CellIdentifier = @"Cell";
     }
 }
 
-- (void) changeTheme {
-	if (Korra.currentTheme == XPThemeDark){
-		[self applyTheme:XPThemeLight];
-		Korra.currentTheme = XPThemeLight;
-	}else if (Korra.currentTheme == XPThemeLight){
-		[self applyTheme:XPThemeDark];
-		Korra.currentTheme = XPThemeDark;
-	}
-}
+// - (void) changeTheme {
+// 	if (Korra.currentTheme == XPThemeDark){
+// 		[self applyTheme:XPThemeLight];
+// 		Korra.currentTheme = XPThemeLight;
+// 	}else if (Korra.currentTheme == XPThemeLight){
+// 		[self applyTheme:XPThemeDark];
+// 		Korra.currentTheme = XPThemeDark;
+// 	}
+// }
 
 
-- (void)applyTheme:(XPTheme)theme {
-	if (theme == XPThemeLight){
+- (void)applyTheme {
+	if (Korra.currentTheme == XPThemeLight){
 
 
 
@@ -604,7 +604,7 @@ static NSString *CellIdentifier = @"Cell";
 			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.5 alpha:1];
 		}
 
-	}else if (theme == XPThemeDark){
+	}else if (Korra.currentTheme == XPThemeDark){
 
 
 		UIColor *backgroundColor = [UIColor blackColor];
