@@ -427,7 +427,7 @@ static NSString *CellIdentifier = @"Cell";
 											NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
 											[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];	
 										}else {
-											[self.view makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
+											[[UIApplication keyWindow] makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
 											[self reloadContent];
 										}								
 									}

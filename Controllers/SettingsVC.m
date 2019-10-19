@@ -21,6 +21,15 @@
     //     target:self 
     //     action:@selector(dismissMe)];
     // self.navigationItem.leftBarButtonItem = doneButton;
+    
+    
+    
+		[[NSNotificationCenter defaultCenter]
+		addObserver:self
+		selector:@selector(applyTheme) 
+        name:kChangeThemeNotification
+        object:nil];
+    
 }
 // - (void) dismissMe {
     // [self dismissViewControllerAnimated:true completion:nil];
@@ -85,7 +94,7 @@
         UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectZero];
         cell.accessoryView = switchview;
         switchview.tag = kThemeSwitchTag;
-        [switchview addTarget:self action:@selector(updateSwitchAtIndexPath:) forControlEvents:UIControlEventTouchUpInside];
+        [switchview addTarget:self action:@selector(updateSwitch:) forControlEvents:UIControlEventTouchUpInside];
     }
     if (indexPath.section == 2) {
         cell.textLabel.text = @"Licenses";
@@ -141,11 +150,12 @@
 }
 
 
-- (void)updateSwitchAtIndexPath:(UISwitch*)aswitch{
+- (void)updateSwitch:(UISwitch*)aswitch{
 	
     if (aswitch.tag == 69) {
             
-        [Aang alertWithTitle:@"Dark mode" message:[NSString stringWithFormat:@"%@", aswitch.isOn ? @"ON" : @"OFF"]];
+        //[Aang alertWithTitle:@"Dark mode" message:[NSString stringWithFormat:@"%@", aswitch.isOn ? @"ON" : @"OFF"]];
+        [Aang setTheme:aswitch.isOn ? XPThemeDark : XPThemeLight ]
     }
 
 }
@@ -171,5 +181,62 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
     return view;
 }
+
+
+- (void)applyTheme{
+
+		if (Aang.currentTheme == XPThemeLight){
+
+			self.view.backgroundColor = White;
+			
+			applyBtn.backgroundColor = kMelroseColor;
+			[applyBtn setTitleColor:White forState:UIControlStateNormal];
+
+			[romPathField applyTheme:XPThemeLight];
+			[patchPathField applyTheme:XPThemeLight];
+			[resultPathField applyTheme:XPThemeLight];
+			
+			self.navigationController.navigationBar.barTintColor = kMelroseColor;
+			self.navigationController.navigationBar.tintColor = White;
+
+			if (self.tabBarController.tabBar){
+				self.tabBarController.tabBar.barTintColor = kMelroseColor;
+				self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
+				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+			}
+		}else if (Aang.currentTheme == XPThemeDark){
+
+
+			UIColor *blackColor = [UIColor blackColor];
+
+			self.view.backgroundColor = blackColor;
+
+			applyBtn.backgroundColor = blackColor;
+			[applyBtn setTitleColor:kMelroseColor forState:UIControlStateNormal];
+
+			[romPathField applyTheme:XPThemeDark];
+			[patchPathField applyTheme:XPThemeDark];
+			[resultPathField applyTheme:XPThemeDark];
+
+			self.navigationController.navigationBar.barTintColor = blackColor;
+
+			self.navigationController.navigationBar.tintColor = kMelroseColor;
+			if (self.tabBarController.tabBar){
+				self.tabBarController.tabBar.barTintColor = blackColor;
+				self.tabBarController.tabBar.tintColor = kMelroseColor;
+				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+				}
+			}
+	// [[NSNotificationCenter defaultCenter] 
+    //    postNotificationName:kChangeThemeNotification
+    //     object:nil userInfo:nil];
+
+}
+
+- (void) dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 @end
