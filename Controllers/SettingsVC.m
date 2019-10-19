@@ -31,6 +31,11 @@
         object:nil];
     
 }
+
+- (void)viewDidLoad {
+   [self applyTheme];
+}
+
 // - (void) dismissMe {
     // [self dismissViewControllerAnimated:true completion:nil];
 // }
@@ -92,9 +97,12 @@
    
     if (indexPath.section == 0){
         UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectZero];
+        BOOL darkTheme = Aang.currentTheme == XPThemeDark ? true: false;
+        [switchview setOn:darkTheme animated:NO];
         cell.accessoryView = switchview;
         switchview.tag = kThemeSwitchTag;
         [switchview addTarget:self action:@selector(updateSwitch:) forControlEvents:UIControlEventTouchUpInside];
+        
     }
     if (indexPath.section == 2) {
         cell.textLabel.text = @"Licenses";
@@ -155,7 +163,9 @@
     if (aswitch.tag == 69) {
             
         //[Aang alertWithTitle:@"Dark mode" message:[NSString stringWithFormat:@"%@", aswitch.isOn ? @"ON" : @"OFF"]];
-        [Aang setTheme:aswitch.isOn ? XPThemeDark : XPThemeLight ]
+        [Aang setTheme:aswitch.isOn ? XPThemeDark : XPThemeLight ];
+
+        [self.tableView reloadData];
     }
 
 }
@@ -189,20 +199,14 @@
 
 			self.view.backgroundColor = White;
 			
-			applyBtn.backgroundColor = kMelroseColor;
-			[applyBtn setTitleColor:White forState:UIControlStateNormal];
 
-			[romPathField applyTheme:XPThemeLight];
-			[patchPathField applyTheme:XPThemeLight];
-			[resultPathField applyTheme:XPThemeLight];
-			
 			self.navigationController.navigationBar.barTintColor = kMelroseColor;
 			self.navigationController.navigationBar.tintColor = White;
 
 			if (self.tabBarController.tabBar){
 				self.tabBarController.tabBar.barTintColor = kMelroseColor;
 				self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
-				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.4 alpha:1];
 			}
 		}else if (Aang.currentTheme == XPThemeDark){
 
@@ -210,13 +214,6 @@
 			UIColor *blackColor = [UIColor blackColor];
 
 			self.view.backgroundColor = blackColor;
-
-			applyBtn.backgroundColor = blackColor;
-			[applyBtn setTitleColor:kMelroseColor forState:UIControlStateNormal];
-
-			[romPathField applyTheme:XPThemeDark];
-			[patchPathField applyTheme:XPThemeDark];
-			[resultPathField applyTheme:XPThemeDark];
 
 			self.navigationController.navigationBar.barTintColor = blackColor;
 
@@ -227,10 +224,6 @@
 				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
 				}
 			}
-	// [[NSNotificationCenter defaultCenter] 
-    //    postNotificationName:kChangeThemeNotification
-    //     object:nil userInfo:nil];
-
 }
 
 - (void) dealloc

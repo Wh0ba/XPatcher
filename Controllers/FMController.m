@@ -427,7 +427,7 @@ static NSString *CellIdentifier = @"Cell";
 											NSString *errText = [NSString stringWithFormat:@"Error, %@", [erro localizedDescription]];
 											[self.view makeToast:errText duration:3.0 position:CSToastPositionTop];	
 										}else {
-											[[UIApplication keyWindow] makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
+											[[[UIApplication sharedApplication] keyWindow] makeToast:[NSString stringWithFormat:@"Removed File: %@", url.lastPathComponent] duration:1 position:CSToastPositionTop];
 											[self reloadContent];
 										}								
 									}
@@ -601,7 +601,7 @@ static NSString *CellIdentifier = @"Cell";
 		if (self.tabBarController.tabBar){
 			self.tabBarController.tabBar.barTintColor = kMelroseColor;
 			self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
-			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.5 alpha:1];
+			self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.4 alpha:1];
 		}
 
 	}else if (Korra.currentTheme == XPThemeDark){

@@ -350,7 +350,7 @@ PatchFormat currentFormat;
 			if (self.tabBarController.tabBar){
 				self.tabBarController.tabBar.barTintColor = kMelroseColor;
 				self.tabBarController.tabBar.tintColor = [UIColor whiteColor];
-				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
+				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.4 alpha:1];
 			}
 		}else if (Korra.currentTheme == XPThemeDark){
 
