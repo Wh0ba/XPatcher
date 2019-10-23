@@ -1,0 +1,6 @@
+
+
+@interface LicensesVC : UIViewController
+
+
+@end

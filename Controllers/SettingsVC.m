@@ -1,4 +1,5 @@
 #import "SettingsVC.h"
+#import "LicensesVC.h"
 
 @implementation SettingsVC {
     Avatar *Aang;
@@ -172,6 +173,12 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 2) {
+        LicensesVC* licVC = [[LicensesVC alloc] init];
+        [self.navigationController pushViewController:licVC animated:YES];
+    }
+
+
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
