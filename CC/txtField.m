@@ -35,10 +35,12 @@ return self;
 - (void) applyTheme:(XPTheme)theme {
 	if (theme == XPThemeLight){
 		
+		self.textColor = [UIColor blackColor];
 		self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:(self.placeholder ?: @"") attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0 alpha:0.5]}];
 	}
 	else {
 		
+		self.textColor = [UIColor whiteColor];
 		self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:(self.placeholder ?: @"") attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:1 alpha:0.5]}];
 	}
 }
