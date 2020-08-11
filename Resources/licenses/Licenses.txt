@@ -63,3 +63,17 @@ and Cygwin builds.  Xdelta3 is covered under the terms of the GPL, see
 COPYING.
 
 Commercial inquiries welcome, please contact <josh.macdonald@gmail.com>
+
+==============================================
+
+These icons were made by @Opa334 for SafariPlus tweak 
+And i'm allowed to use them as long as i credit the author
+
+file@2x.png
+file@3x.png
+folder@2x.png
+folder@3x.png
+
+
+Twitter: @Opa334
+SafariPlus source code : https://www.github.com/opa334/safariplus

@@ -178,7 +178,7 @@ static NSString *const themeKey = @"XPatcher.currentTheme";
 	}
 	
 	return [NSByteCountFormatter stringFromByteCount:[fileAttr fileSize] countStyle:NSByteCountFormatterCountStyleFile];
-	
+
 }
 
 

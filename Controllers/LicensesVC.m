@@ -26,6 +26,7 @@
     mainTextView = [[UITextView alloc] initWithFrame:self.view.frame textContainer:nil];
     mainTextView.editable = NO;
     mainTextView.selectable = YES;
+    mainTextView.dataDetectorTypes = UIDataDetectorTypeAll;
     [self.view addSubview:mainTextView];
     [self applyCostraints];
     mainTextView.backgroundColor = Aang.currentTheme == XPThemeDark ? [UIColor blackColor] : [UIColor whiteColor];

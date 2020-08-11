@@ -64,7 +64,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 3;
+	return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -108,6 +108,13 @@
     if (indexPath.section == 2) {
         cell.textLabel.text = @"Licenses";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }if (indexPath.section == 3) {
+        cell.textLabel.text = @"My Twitter";
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    if (indexPath.section == 4) {
+        cell.textLabel.text = @"My Github";
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 	return cell;
 }
@@ -130,7 +137,7 @@
         case 1: {
                 switch (indexPath.row) {
                     case 0: {
-                        cell.textLabel.text = @"XPatcher\nA GUI frontend for Flips, libppf and XDelta\nCopyright © 2017-2019 Wh0ba. All Rights Reserved.";
+                        cell.textLabel.text = @"XPatcher\nA GUI frontend for Flips, libppf and XDelta\nMade by Wh0ba.";
                         cell.textLabel.textAlignment = NSTextAlignmentCenter;
                     } break;
                 
@@ -177,7 +184,11 @@
         LicensesVC* licVC = [[LicensesVC alloc] init];
         [self.navigationController pushViewController:licVC animated:YES];
     }
-
+    if (indexPath.section == 3) {
+       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/Wh0ba"]];
+    }if (indexPath.section == 4) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/Wh0ba"]];
+    }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
