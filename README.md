@@ -6,7 +6,7 @@ This app allows you to apply patches to files on your iOS devices , mostly used 
 With a simple to use interface to make it as user-friendly as possible 
 
 This project is Licenses under GPL to be compatible with the other Licenses used in the code bases and libraries used.
-Full info about Licenses can be found under ./Resources/licenses/Licenses.txt
+Full info about Licenses can be found under (Resources/licenses/Licenses.txt)[Resources/licenses/Licenses.txt]
 
 The app itself is written in pure Objective-C because it's the best (⌐■_■)
 While the libraries are a mixer of C and C++
