@@ -120,44 +120,14 @@ PatchFormat currentFormat;
 		action:@selector(cleanFields)];
 	
 	self.navigationItem.rightBarButtonItem = clearButton;
-
-	// UIBarButtonItem* themeButton = [[UIBarButtonItem alloc] 
-	// 	initWithTitle:@"Theme" 
-	// 	style:UIBarButtonItemStylePlain 
-	// 	target:self 
-	// 	action:@selector(changeTheme)];
-	// self.navigationItem.leftBarButtonItem = themeButton;
-    // UIBarButtonItem* settingsButton = [[UIBarButtonItem alloc] 
-    //     initWithTitle:@"More" 
-    //     style:UIBarButtonItemStylePlain 
-    //     target:self 
-    //     action:@selector(openSettings)];
-	
-	// // UIFont *f1 = [UIFont fontWithName:@"Helvetica" size:24.0]; 
-	// // NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:f1, UITextAttributeFont, nil]; 
-	// // [settingsButton setTitleTextAttributes:dict forState:UIControlStateNormal];
-	
-	// self.navigationItem.leftBarButtonItem = settingsButton;
     	
 }
-
-// - (void)openSettings {
-// 	UINavigationController *SettingsPage = [[UINavigationController alloc] initWithRootViewController:[[SettingsVC alloc] init]];
-// 	[self presentViewController:SettingsPage animated:YES completion:nil];
-// }
-
-
 
 - (void) changeTheme {
 	if (Korra.currentTheme == XPThemeDark){
 		[Korra setTheme:XPThemeLight];
-		// [self applyTheme:XPThemeLight];
-		// Korra.currentTheme = XPThemeLight;
 	}else if (Korra.currentTheme == XPThemeLight){
 		[Korra setTheme:XPThemeDark];
-
-		// [self applyTheme:XPThemeDark];
-		// Korra.currentTheme = XPThemeDark;
 	}
 	
 }
@@ -198,7 +168,6 @@ PatchFormat currentFormat;
 	patchPathField.translatesAutoresizingMaskIntoConstraints = NO;
 	
 	
-	//NSLayoutConstraint* TopFieldCn = 
 	[NSLayoutConstraint constraintWithItem:romPathField
 		attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
 		toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom
@@ -271,11 +240,6 @@ PatchFormat currentFormat;
 	multiplier:1.0 constant:-20].active = true;
 	
 		
-		
-		//resultPathField
-	
-	//[self.rootViewController.view addConstraint:TopFieldCn];
-	
 }
 
 - (void)loadButtons {
@@ -320,16 +284,6 @@ PatchFormat currentFormat;
 }
 
 
-/*
-- (void)loadLabels {
-	
-	statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, SCR.height - 300, (SCR.width - 20), 30)];
-	statusLabel.text = @"Ready";
-	statusLabel.textAlignment = NSTextAlignmentCenter;
-	statusLabel.textColor = kFgcolor;
-	[SV addSubview:statusLabel];
-}
-*/
 
 - (void)applyTheme{
 
@@ -375,9 +329,6 @@ PatchFormat currentFormat;
 				self.tabBarController.tabBar.unselectedItemTintColor = [UIColor colorWithWhite:0.7 alpha:1];
 				}
 			}
-	// [[NSNotificationCenter defaultCenter] 
-    //    postNotificationName:kChangeThemeNotification
-    //     object:nil userInfo:nil];
 
 }
 
@@ -477,8 +428,7 @@ PatchFormat currentFormat;
 
 
 - (PatchFormat)detectPatchFormat:(NSString*)patchPath{
-	//I'm just going to look at the file extensions for now.
-	//In the future, I might wish to actually look at the contents of the file.
+
     NSString* lowerPath = [patchPath lowercaseString];
 	if([lowerPath hasSuffix:@".ups"]){
 		return UPSPAT;
@@ -532,21 +482,13 @@ PatchFormat currentFormat;
 	
 	if([fileManager fileExistsAtPath:patchPath]){
 		if([romPath length] > 0 && [outputPath length] > 0 && [patchPath length] > 0){
-			//statusLabel.text = @"Now patching...";
 	
 	MPPatchResult* errMsg = [self ApplyPatch:patchPath :romPath :outputPath];
-		//[activityIndicator stopAnimating];
-		//statusLabel.text = @"Ready";
-		
 		
 		if(errMsg == nil){
-			//[hud hideAnimated:YES];
 			[Korra alertWithTitle:@"Done" message:@"The patch has been applied"];
-			
 		}
 		else if(errMsg.IsWarning){
-			//[hud hideAnimated:YES];
-			
 			[Korra alertWithTitle:@"Patching Finished With Warning" message:errMsg.Message];
 			errMsg = nil;
 		}else  {
@@ -568,11 +510,4 @@ PatchFormat currentFormat;
 
 
 
-
-/*
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-*/
 @end

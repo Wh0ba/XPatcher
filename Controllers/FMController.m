@@ -15,7 +15,6 @@ static NSString *CellIdentifier = @"Cell";
 
 @interface FMController() 
 
-//@property (nonatomic, strong) NSString *currentPath;
 @property (nonatomic, strong) NSURL *currentURL;
 @property (nonatomic, assign) BOOL exCall;
 @property (nonatomic, assign) BOOL forField;
@@ -32,8 +31,7 @@ static NSString *CellIdentifier = @"Cell";
 	
 	NSMutableArray *dirCon;
 	
-	//id parent, target;
-	int targetTag;// 1 = rom , 2 = patch
+	// int targetTag;// 1 = rom , 2 = patch
  Avatar *Korra;	
 }
 @synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
@@ -44,21 +42,21 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark -
 #pragma mark Initilizers
 
-- (instancetype)initWithTarget:(int)tar {
+// - (instancetype)initWithTarget:(int)tar {
 	
-	self = [super initWithStyle:UITableViewStylePlain];
+// 	self = [super initWithStyle:UITableViewStylePlain];
 	
-		if (self) {
+// 		if (self) {
 		
-		//parent = par;
-		targetTag = tar;
-		self.forField = YES;
-		self.title = [Korra.documentsDirectory lastPathComponent];
-		}
+// 		//parent = par;
+// 		targetTag = tar;
+// 		self.forField = YES;
+// 		self.title = [Korra.documentsDirectory lastPathComponent];
+// 		}
 	
 	
-	return self;
-}
+// 	return self;
+// }
 
 - (instancetype)initWithPath:(NSURL *)path {
 	
@@ -306,13 +304,13 @@ static NSString *CellIdentifier = @"Cell";
 		if (self.inAppDir) inside.inAppDir = YES;
 		[self.navigationController pushViewController:inside animated:YES];
 	}else {
-		if (_forField) {
-			if ([self.delegate conformsToProtocol:@protocol(FMDelegate)]) [self.delegate setURL:fileURL forFieldTag:targetTag];
-			[self dismissViewControllerAnimated:YES completion:nil];
-		}else {
+		// if (_forField) {
+		// 	if ([self.delegate conformsToProtocol:@protocol(FMDelegate)]) [self.delegate setURL:fileURL forFieldTag:targetTag];
+		// 	[self dismissViewControllerAnimated:YES completion:nil];
+		// }else {
 			[self actionsForFileAtURL:fileURL];
 			[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-		}
+		//}
 	}
 }
 
@@ -459,8 +457,6 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)navBarMagic {
 	
-	//self.navigationController.navigationBar.barTintColor = kMelroseColor;
-	//self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.translucent = NO;
 	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
@@ -511,21 +507,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 
-/*
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-*/
-
-
-
-
-
-
-
-
-
 #pragma mark UIDocumentPickerDelegate
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
@@ -536,8 +517,6 @@ static NSString *CellIdentifier = @"Cell";
 		for (NSURL *URL in urls){
 			NSError *fileError;
 			
-			//NSString *URLPath = [URL.absoluteString stringByReplacingOccurrencesOfString:@"File:/" withString:@""];
-			// [fileManager moveItemAtPath:URL.path toPath:Korra.documentsDirectory.path error:&fileError];
 
 			NSData *fileData = [NSData dataWithContentsOfURL:URL];
 			NSString *newPath = [Korra.documentsDirectory.path stringByAppendingPathComponent:URL.lastPathComponent];
@@ -557,32 +536,13 @@ static NSString *CellIdentifier = @"Cell";
 
 		
 		if (pathComps.count <= 0) return; 
-		//NSString *importedFiles = [pathComps componentsJoinedByString:@","];
-		
 
-		//NSString *alertMessage = [NSString stringWithFormat:@"Successfully imported %@", importedFiles];
 		dispatch_async(dispatch_get_main_queue(), ^{
-			// UIAlertController *alertController = [UIAlertController
-			//                                       alertControllerWithTitle:@"Import"
-			//                                       message:alertMessage
-			//                                       preferredStyle:UIAlertControllerStyleAlert];
-			// [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
-			// [self presentViewController:alertController animated:YES completion:nil];
 			[self reloadContent];
 		});
 	
     }
 }
-
-// - (void) changeTheme {
-// 	if (Korra.currentTheme == XPThemeDark){
-// 		[self applyTheme:XPThemeLight];
-// 		Korra.currentTheme = XPThemeLight;
-// 	}else if (Korra.currentTheme == XPThemeLight){
-// 		[self applyTheme:XPThemeDark];
-// 		Korra.currentTheme = XPThemeDark;
-// 	}
-// }
 
 
 - (void)applyTheme {

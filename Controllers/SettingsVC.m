@@ -137,7 +137,7 @@
         case 1: {
                 switch (indexPath.row) {
                     case 0: {
-                        cell.textLabel.text = @"XPatcher\nA GUI frontend for Flips, libppf and XDelta\nMade by Wh0ba.";
+                        cell.textLabel.text = @"XPatcher\nA GUI frontend for Flips, libppf and XDelta\nMade by Wh0ba (@Wh0ba 2020©).";
                         cell.textLabel.textAlignment = NSTextAlignmentCenter;
                     } break;
                 
@@ -169,8 +169,6 @@
 - (void)updateSwitch:(UISwitch*)aswitch{
 	
     if (aswitch.tag == 69) {
-            
-        //[Aang alertWithTitle:@"Dark mode" message:[NSString stringWithFormat:@"%@", aswitch.isOn ? @"ON" : @"OFF"]];
         [Aang setTheme:aswitch.isOn ? XPThemeDark : XPThemeLight ];
 
         [self.tableView reloadData];

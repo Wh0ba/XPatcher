@@ -27,14 +27,13 @@
 	tabC.tabBar.barTintColor = [UIColor colorWithRed:1 green:0.36 blue:0.36 alpha:1]; //Melrose
 	tabC.tabBar.translucent = NO;
 	tabC.tabBar.tintColor = [UIColor whiteColor];
-	tabC.tabBar.unselectedItemTintColor = [UIColor colorWithRed:0 green:0.1 blue:0.174 alpha:1];
+	tabC.tabBar.unselectedItemTintColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
 
 
 
 	mainVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Patcher" image:[UIImage imageNamed:@"icons/patch.png"] tag:200];
 	docsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Documents" image:[UIImage imageNamed:@"icons/FilesTab-Unselected.png"] selectedImage:[UIImage imageNamed:@"icons/FilesTab-Selected.png"]];
 	prefsVC.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:420];
-//UITabBarSystemItemMore
 
 	window.rootViewController = tabC;
 	[window makeKeyAndVisible];
@@ -61,10 +60,7 @@
 	{
 		[self moveFileAtPathToDocumentsDirectory:[url path]];
 	}
-	/*else
-	{
-	return [self handleURLSchemeURL:url];
-	}*/
+	
 	return YES;
 }
 
@@ -76,8 +72,6 @@
 
 	NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
 
-	NSString *indexDir = [documentsDirectory stringByAppendingPathComponent:@"inbox"];
-
 	BOOL fileExists = NO;
 
 	for (NSString *item in contents) {
@@ -87,19 +81,14 @@
 		if ([name isEqualToString:newFilename]) {
 			fileExists = YES;
 			break;
-		}//if
-	}//for loop
+		}
+	}
 	
 	if (fileExists) {
 		filename = [NSString stringWithFormat:@"%@-copy", filename];
 	}
 	
 	[[NSFileManager defaultManager] moveItemAtPath:filepath toPath:[documentsDirectory stringByAppendingPathComponent:filename] error:nil];
-
-	if ([[NSFileManager defaultManager] contentsOfDirectoryAtPath:indexDir error:nil].count <= 0) {
-		[[NSFileManager defaultManager] removeItemAtPath:indexDir error:nil];
-	}
-
 }
 
 

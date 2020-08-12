@@ -12,7 +12,4 @@
 @property (nonatomic, strong) txtField *resultPathField;
 
 
-//- (void)setURL:(NSURL *)url forField:(id)tf;
-
-
 @end
