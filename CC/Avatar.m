@@ -1,3 +1,6 @@
+//Made by Wh0ba 2018©
+
+
 #import "Avatar.h"
 
 @implementation Avatar {

@@ -1,5 +1,5 @@
 // Util.h 
-// Made by Wh0ba
+// Made by Wh0ba 2017
 
 #ifndef Util_h
 #define Util_h

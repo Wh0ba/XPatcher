@@ -1,13 +1,8 @@
 ARCHS = arm64
 
-
-#GO_EASY_ON_ME = 1
-
 include $(THEOS)/makefiles/common.mk
 
 APPLICATION_NAME = XPatcher
-
-
 FLIPS_SRC := $(wildcard MC/Flips/*.cpp)
 NONEIOS = MC/Flips/flips-cli.cpp 
 FLIPS_SRC := $(filter-out $(NONEIOS), $(FLIPS_SRC)) 
@@ -26,20 +21,9 @@ $(APPLICATION_NAME)_FILES = $(wildcard *.m) \
 
 
 $(APPLICATION_NAME)_FRAMEWORKS = UIKit CoreGraphics QuartzCore MobileCoreServices
-
-
-
-
 $(APPLICATION_NAME)_LIBRARIES = c++
 $(APPLICATION_NAME)_CFLAGS = -fobjc-arc -Wno-unused-function 
-
-
-#$(APPLICATION_NAME)_CODESIGN_FLAGS = -Sent.plist
-
 
 CCFLAGS += -std=c++11 
 
 include $(THEOS_MAKE_PATH)/application.mk
-
-#package::
-#	packages/deb2ipa.h
