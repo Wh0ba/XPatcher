@@ -1,5 +1,5 @@
 XPatcher is released under the GPL license to be compatible with the licenses of the libraries and code bases used in this project
-
+Source code : https://github.com/Wh0ba/XPatcher
 
 Some of the code used in XPatcher is from MultiPatch (All the patching adapters, with some small changes to make them work with iOS): https://github.com/Sappharad/MultiPatch
 MultiPatch application itself is released under the GPL in an effort to be compatible with the licenses of the patching libraries contained within.
