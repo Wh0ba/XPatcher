@@ -21,7 +21,7 @@ Most of the code I had to write on my IPhone that's way it's really messy , I mo
 ## Compiling 
 
 To compile this project you simply need to first install theos https://github.com/theos/theos
-And then clone and run make package (to generate a .deb)
+And then clone and run make package (to generate a .deb) that you can istall to your iOS device using dpkg
 
 To convert it into an ipa you can use [my script deb2ipa.sh](https://gist.github.com/Wh0ba/90cdb675c101e9b9eb3b80585f54b93c)
 Simply put the script in the packages folder and then run `./deb2ipa.sh` from within the folder and follow the instructions displayed in the script
