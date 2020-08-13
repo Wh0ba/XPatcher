@@ -6,6 +6,7 @@
     UIImage *_fileIcon;
     UIImage *_folderIcon;
     NSArray *_notOkPaths;
+    NSArray *_romExtensions;
     NSFileManager *fileManager;
 }
 

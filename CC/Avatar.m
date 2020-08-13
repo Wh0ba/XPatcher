@@ -100,18 +100,23 @@ static NSString *const themeKey = @"XPatcher.currentTheme";
 	
 	
 	NSString* ext = [file.pathExtension lowercaseString];
-	
-	NSArray *supportedExtensions = @[
-	@"gba",
-	@"gb",
-	@"gbc",
-	@"nes",
-	@"smc",
-	@"sfc",
-	@"iso",
-	@"ds",
-	];
-	if ([supportedExtensions containsObject:ext]) return YES;
+	if (!_romExtensions) {
+	NSData *jsonArrayData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"roms" ofType:@"json" inDirectory:@"extensions"]];
+	_romExtensions = [NSJSONSerialization JSONObjectWithData:jsonArrayData options:kNilOptions error:nil];
+	}
+	// NSArray *supportedExtensions = @[
+	// @"gba",
+	// @"gb",
+	// @"gbc",
+	// @"nes",
+	// @"smc",
+	// @"sfc",
+	// @"iso",
+	// @"ds",
+	// @"nds",
+	// @"n64"
+	// ];
+	if ([_romExtensions containsObject:ext]) return YES;
 	
 	
 	return NO;
