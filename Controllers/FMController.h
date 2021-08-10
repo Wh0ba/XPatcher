@@ -1,3 +1,6 @@
+@import Foundation;
+@import UIKit;
+
 
 @protocol FMDelegate <NSObject>
 @optional

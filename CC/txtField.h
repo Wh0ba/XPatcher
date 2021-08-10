@@ -1,5 +1,7 @@
 #import "../defs.h"
 
+@import Foundation;
+@import UIKit;
 
 @interface txtField : UITextField<UITextFieldDelegate>
 @property (nonatomic, strong) NSURL *fileURL;

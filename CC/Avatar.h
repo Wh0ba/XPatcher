@@ -1,4 +1,6 @@
 #import "../defs.h"
+@import Foundation;
+@import UIKit;
 
 
 @interface Avatar: NSObject {

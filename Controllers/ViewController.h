@@ -1,4 +1,7 @@
 #import "FMController.h"
+@import Foundation;
+@import UIKit;
+
 @class txtField;
 
 @interface ViewController : UIViewController <UITextFieldDelegate, FMDelegate>

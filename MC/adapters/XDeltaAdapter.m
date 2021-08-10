@@ -11,9 +11,9 @@
 
 @implementation XDeltaAdapter
 +(MPPatchResult*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
-	FILE*  InFile = fopen([patch cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE*  SrcFile = fopen([input cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE* OutFile = fopen([output cStringUsingEncoding:[NSString defaultCStringEncoding]], "wb");
+	FILE*  InFile = fopen(patch.UTF8String, "rb");
+	FILE*  SrcFile = fopen(input.UTF8String, "rb");
+	FILE* OutFile = fopen(output.UTF8String, "wb");
 	int r = code (0, InFile, SrcFile, OutFile, 0x1000);
 	
 	fclose(OutFile);
@@ -34,9 +34,9 @@
 }
 
 +(MPPatchResult*)CreatePatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
-    FILE* oldFile = fopen([orig cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE* newFile = fopen([modify cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE* deltaFile = fopen([output cStringUsingEncoding:[NSString defaultCStringEncoding]], "wb");
+    FILE* oldFile = fopen(orig.UTF8String, "rb");
+	FILE* newFile = fopen(modify.UTF8String, "rb");
+	FILE* deltaFile = fopen(output.UTF8String, "wb");
 	int r = code (1, newFile, oldFile, deltaFile, 0x1000);
 	
 	fclose(deltaFile);

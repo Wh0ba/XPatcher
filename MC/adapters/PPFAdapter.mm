@@ -45,7 +45,7 @@
 	lppf::LibPPF ppf;
 	int error;
 	
-	if ((error = ppf.loadPatch([patch cStringUsingEncoding:[NSString defaultCStringEncoding]])) != 0) {
+	if ((error = ppf.loadPatch(patch.UTF8String)) != 0) {
 		return [self errorMsg:error];
 	}
 	
@@ -59,7 +59,7 @@
 	}
 	
 	// Apply PPF data to file
-	if ((error = ppf.applyPatch([output cStringUsingEncoding:[NSString defaultCStringEncoding]], false)) != 0) {
+	if ((error = ppf.applyPatch(output.UTF8String, false)) != 0) {
 		return [self errorMsg:error];
 	}
 	return nil; //Success!

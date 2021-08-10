@@ -1,3 +1,6 @@
+@import Foundation;
+@import UIKit;
+
 @interface LSApplicationProxy : NSObject
 + (LSApplicationProxy *)applicationProxyForIdentifier:(id)appIdentifier;
 @property(readonly) NSString * applicationIdentifier;
