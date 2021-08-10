@@ -29,4 +29,4 @@ Simply put the script in the packages folder and then run `./deb2ipa.sh` from wi
 This will result in a .ipa archive in packages/ipa/ folder which you can side load and install to your iOS Device (Using AltStore or other signing services)
 
 
-Wh0ba 2017-2020©
+AbdulWahab Fanar - (@Wh0ba 2017-2020©)
