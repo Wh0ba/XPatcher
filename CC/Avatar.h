@@ -18,6 +18,8 @@
 @property (nonatomic, retain) NSFileManager *fileManager;
 @property (nonatomic, strong) NSArray *notOkPaths;
 @property (nonatomic) XPTheme currentTheme;
+@property (nonatomic) BOOL isApplyPatchMode;
+
 
 + (id)shared;
 
