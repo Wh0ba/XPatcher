@@ -90,7 +90,7 @@ static NSString *CellIdentifier = @"Cell";
 	[super viewDidLoad];
 	if (@available(iOS 11, *)) {
 		self.navigationController.navigationBar.prefersLargeTitles = YES;
-	} }
+	}
 	
 	
 	[self loadContent];
