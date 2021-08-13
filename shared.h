@@ -29,6 +29,7 @@
 
 #define kSetFileNotification @"iPatchSetFileURL"
 #define kBookmarksReload @"kFavsReload"
+#define kPatchModeChangedNotification @"kPMCN"
 ///controllers
 
 

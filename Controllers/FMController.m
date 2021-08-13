@@ -6,13 +6,6 @@
 static NSString *CellIdentifier = @"Cell";
 
 
-
-
-
-
-
-
-
 @interface FMController() 
 
 @property (nonatomic, strong) NSURL *currentURL;
@@ -30,8 +23,7 @@ static NSString *CellIdentifier = @"Cell";
 	NSFileManager *fileManager;
 	
 	NSMutableArray *dirCon;
-	
-	// int targetTag;// 1 = rom , 2 = patch
+
  Avatar *Korra;	
 }
 @synthesize exCall, currentURL, showHiddenFiles, allowDeletingFromApps;
@@ -40,23 +32,8 @@ static NSString *CellIdentifier = @"Cell";
 
 
 #pragma mark -
-#pragma mark Initilizers
+#pragma mark Initializers
 
-// - (instancetype)initWithTarget:(int)tar {
-	
-// 	self = [super initWithStyle:UITableViewStylePlain];
-	
-// 		if (self) {
-		
-// 		//parent = par;
-// 		targetTag = tar;
-// 		self.forField = YES;
-// 		self.title = [Korra.documentsDirectory lastPathComponent];
-// 		}
-	
-	
-// 	return self;
-// }
 
 - (instancetype)initWithPath:(NSURL *)path {
 	
@@ -64,13 +41,9 @@ static NSString *CellIdentifier = @"Cell";
 	
 		if (self) {
 		
-		//self.currentPath = path;
 		self.exCall = YES;
 		self.forField = NO;
 		self.currentURL = path;
-		
-		
-		//[self loadContent];
 		self.title = [path lastPathComponent];
 		
 	}
@@ -81,14 +54,12 @@ static NSString *CellIdentifier = @"Cell";
 	self = [super initWithStyle:UITableViewStylePlain];
 	if (!self) return nil;
 	
-	//self.currentPath = path;
 	self.exCall = YES;
 	self.forField = NO;
 	self.currentURL = path;
 	self.appBundleID = bid;
 	self.inAppDir = true;
 	
-	//[self loadContent];
 	self.title = [path lastPathComponent];
 	
 	return self;
@@ -102,20 +73,14 @@ static NSString *CellIdentifier = @"Cell";
 	[super loadView];
 	Korra = [Avatar shared];	
 	self.view.backgroundColor = kBgcolor;
-	
-	
 	fileManager = [NSFileManager defaultManager];
-	
-	
+
 	showHiddenFiles = YES;
 	allowDeletingFromApps = NO;
 	
 	[self navBarMagic];
 	[self applyTheme];
-	//self.tableView.allowEditing = NO;
-	
-	//[self setNav];
-	
+
 	self.refreshControl = [[UIRefreshControl alloc] init];
 	[self.refreshControl addTarget:self action:@selector(pulledToRefresh) forControlEvents:UIControlEventValueChanged];
 }
@@ -127,10 +92,6 @@ static NSString *CellIdentifier = @"Cell";
 	
 	
 	[self loadContent];
-
-
-//	if (![currentURL isEqual:Korra.documentsDirectory])[self setNav];
-
 
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
@@ -147,12 +108,12 @@ static NSString *CellIdentifier = @"Cell";
 		selector:@selector(applyTheme) 
         name:kChangeThemeNotification
         object:nil];
+
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	// [self reloadContent];
 }
 
 
@@ -291,7 +252,7 @@ static NSString *CellIdentifier = @"Cell";
 	NSURL *fileURL = dirCon[indexPath.row];
 	
 	if (![fileManager fileExistsAtPath:fileURL.path isDirectory:nil]) {
-		[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exsist"]];
+		[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exist"]];
 		return;
 	}
 	
@@ -304,13 +265,8 @@ static NSString *CellIdentifier = @"Cell";
 		if (self.inAppDir) inside.inAppDir = YES;
 		[self.navigationController pushViewController:inside animated:YES];
 	}else {
-		// if (_forField) {
-		// 	if ([self.delegate conformsToProtocol:@protocol(FMDelegate)]) [self.delegate setURL:fileURL forFieldTag:targetTag];
-		// 	[self dismissViewControllerAnimated:YES completion:nil];
-		// }else {
 			[self actionsForFileAtURL:fileURL];
 			[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-		//}
 	}
 }
 
@@ -319,8 +275,6 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark my methods
 - (void)buttonActions:(id)sender {
 
-	//int tg = [sender tag];
-	
 	switch ([sender tag]) {
 		case 1:
 			[self dismissViewControllerAnimated:YES completion:nil];
@@ -349,21 +303,23 @@ static NSString *CellIdentifier = @"Cell";
 	];
 
 	if ([Korra isPatchFileAtURL:url]) {
-		[actionSheet addAction:
-			[UIAlertAction 
-				actionWithTitle:@"set Patch" 
-				style:UIAlertActionStyleDefault 
-				handler:^(UIAlertAction *action) {
-					NSDictionary *userInfo = @{@"fileURL":url,@"tag":@2};
-					[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
-				}
-			]
-		];
+		if (Korra.isApplyPatchMode){
+			[actionSheet addAction:
+				[UIAlertAction 
+					actionWithTitle:@"Set patch" 
+					style:UIAlertActionStyleDefault 
+					handler:^(UIAlertAction *action) {
+						NSDictionary *userInfo = @{@"fileURL":url,@"tag":@2};
+						[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
+					}
+				]
+			];
+		}
 	}
 	else {
 		[actionSheet addAction:
 			[UIAlertAction 
-				actionWithTitle:@"set ROM" 
+				actionWithTitle:(Korra.isApplyPatchMode) ? @"Set ROM" : @"Set original ROM" 
 				style:UIAlertActionStyleDefault 
 				handler:^(UIAlertAction *action) {
 					NSDictionary *userInfo = @{@"fileURL":url,@"tag":@1};
@@ -371,6 +327,18 @@ static NSString *CellIdentifier = @"Cell";
 				}
 			]
 		];
+		if (!Korra.isApplyPatchMode) {
+			[actionSheet addAction:
+			[UIAlertAction 
+				actionWithTitle:@"Set Modified ROM" 
+				style:UIAlertActionStyleDefault 
+				handler:^(UIAlertAction *action) {
+					NSDictionary *userInfo = @{@"fileURL":url,@"tag":@3};//tag 3 means set it as the modified rom
+					[[NSNotificationCenter defaultCenter] postNotificationName:kSetFileNotification object:nil userInfo:userInfo];
+				}
+			]
+		];
+		}
 	}
 	[actionSheet addAction:
 		[UIAlertAction 
@@ -383,12 +351,6 @@ static NSString *CellIdentifier = @"Cell";
 		]
 	];
 
-/*
-[actionSheet addAction:[UIAlertAction actionWithTitle:@"Open In Filza" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	 NSString* filzaPath = [NSString stringWithFormat:@"%@%@", @"filza://view", [url.path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]]]; 
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaPath]];
-}]];
-*/
 	if ([Korra isSafeDirAtURL:url]) {
 		
 		[actionSheet 
