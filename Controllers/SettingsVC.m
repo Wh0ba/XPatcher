@@ -17,12 +17,6 @@
     ((UITableView*)self.view).separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.backgroundColor = Aang.currentTheme == XPThemeDark ? Black : White;
     [self navBarMagic];
-    // UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] 
-    //     initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-    //     target:self 
-    //     action:@selector(dismissMe)];
-    // self.navigationItem.leftBarButtonItem = doneButton;
-    
     
     
 		[[NSNotificationCenter defaultCenter]
@@ -34,8 +28,11 @@
 }
 
 - (void)viewDidLoad {
-   [self applyTheme];
-}
+    [super viewDidLoad];
+    [self applyTheme];
+    if (@available(iOS 11, *)) {
+		self.navigationController.navigationBar.prefersLargeTitles = YES;
+	} }
 
 // - (void) dismissMe {
     // [self dismissViewControllerAnimated:true completion:nil];
@@ -46,9 +43,6 @@
 }
 
 - (void)navBarMagic {
-	
-	//self.navigationController.navigationBar.barTintColor = kMelroseColor;
-	//self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	
 	self.navigationController.navigationBar.translucent = NO;
 	
@@ -137,7 +131,7 @@
         case 1: {
                 switch (indexPath.row) {
                     case 0: {
-                        cell.textLabel.text = @"XPatcher\nA GUI frontend for Flips, libppf and XDelta\nMade by Wh0ba (@Wh0ba 2020©).";
+                        cell.textLabel.text = @"XPatcher\nA GUI frontend for Flips, libppf and XDelta\nMade by AbdulWahab Fanar (@Wh0ba)";
                         cell.textLabel.textAlignment = NSTextAlignmentCenter;
                     } break;
                 
