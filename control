@@ -1,6 +1,6 @@
 Package: com.wh0ba.xpatcher
 Name: xpatcher
-Version: 1.2
+Version: 2.0
 Architecture: iphoneos-arm
 Description: A GUI frontend for popular file patching libraries
 Maintainer: wh0ba
