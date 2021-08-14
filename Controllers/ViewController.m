@@ -160,6 +160,9 @@ PatchFormat creationFormat;
 			handler:^(UIAlertAction *action) {
 				[self changePatchingMode:NO];
 			}]];
+    
+	//This tells the action sheet to popUp from the "Mode↹" bar button (looks dope and clear),and if not provided it will CRASH on iPads
+    actionSheet.popoverPresentationController.barButtonItem = self.navigationItem.leftBarButtonItem;
 	[self presentViewController:actionSheet animated:YES completion:nil];
 }
 
@@ -205,6 +208,11 @@ PatchFormat creationFormat;
     [actionSheet addAction: [self alertActionWithPatchFormat:UPSPAT]];
     [actionSheet addAction: [self alertActionWithPatchFormat:XDELTAPAT]];
     
+
+    //These two lines make the action sheet popUp from the Patch Type button position (nice & clean)
+	//Otherwise it will CRASH on iPads (with missing position info error)
+    actionSheet.popoverPresentationController.sourceView = self.view;
+	actionSheet.popoverPresentationController.sourceRect = patchTypeBtn.frame;
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
@@ -258,8 +266,7 @@ PatchFormat creationFormat;
     romPathField.delegate = self;
 
     patchPathField =
-        [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(romPathField)),
-                                                   (SCR.width - 40), kDefH)];
+        [[txtField alloc] initWithFrame:CGRectMake(20, (sumPosOf(romPathField)), (SCR.width - 40), kDefH)];
     patchPathField.tag = 2;
     patchPathField.placeholder = @"Patch file";
     patchPathField.delegate = self;
@@ -268,8 +275,7 @@ PatchFormat creationFormat;
     patchPathField.textAlignment = NSTextAlignmentCenter;
 
     resultPathField = [[txtField alloc]
-        initWithFrame:CGRectMake(20, (sumPosOf(patchPathField)),
-                                 (SCR.width - 40), kDefH)];
+        initWithFrame:CGRectMake(20, (sumPosOf(patchPathField)),(SCR.width - 40), kDefH)];
 
     resultPathField.placeholder = @"Type result file name";
     resultPathField.delegate = self;
@@ -286,115 +292,115 @@ PatchFormat creationFormat;
     patchPathField.translatesAutoresizingMaskIntoConstraints = NO;
 
     [NSLayoutConstraint constraintWithItem:romPathField
-                                 attribute:NSLayoutAttributeTop
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.topLayoutGuide
-                                 attribute:NSLayoutAttributeBottom
+                                attribute:NSLayoutAttributeTop
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.topLayoutGuide
+                                attribute:NSLayoutAttributeBottom
                                 multiplier:1.0
-                                  constant:20]
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:romPathField
-                                 attribute:NSLayoutAttributeHeight
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:nil
-                                 attribute:NSLayoutAttributeHeight
+                                attribute:NSLayoutAttributeHeight
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:nil
+                                attribute:NSLayoutAttributeHeight
                                 multiplier:0
-                                  constant:kDefH]
+                                constant:kDefH]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:romPathField
-                                 attribute:NSLayoutAttributeLeading
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeLeading
+                                attribute:NSLayoutAttributeLeading
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeLeading
                                 multiplier:1.0
-                                  constant:20]
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:romPathField
-                                 attribute:NSLayoutAttributeTrailing
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeTrailing
+                                attribute:NSLayoutAttributeTrailing
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeTrailing
                                 multiplier:1.0
-                                  constant:-20]
+                                constant:-20]
         .active = true;
 
     /////////////////////////
 
     [NSLayoutConstraint constraintWithItem:patchPathField
-                                 attribute:NSLayoutAttributeTop
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:romPathField
-                                 attribute:NSLayoutAttributeBottom
+                                attribute:NSLayoutAttributeTop
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:romPathField
+                                attribute:NSLayoutAttributeBottom
                                 multiplier:1.0
-                                  constant:5]
+                                constant:5]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:patchPathField
-                                 attribute:NSLayoutAttributeHeight
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:nil
-                                 attribute:NSLayoutAttributeHeight
+                                attribute:NSLayoutAttributeHeight
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:nil
+                                attribute:NSLayoutAttributeHeight
                                 multiplier:0
-                                  constant:kDefH]
+                                constant:kDefH]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:patchPathField
-                                 attribute:NSLayoutAttributeLeading
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeLeading
+                                attribute:NSLayoutAttributeLeading
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeLeading
                                 multiplier:1.0
-                                  constant:20]
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:patchPathField
-                                 attribute:NSLayoutAttributeTrailing
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeTrailing
+                                attribute:NSLayoutAttributeTrailing
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeTrailing
                                 multiplier:1.0
-                                  constant:-20]
+                                constant:-20]
         .active = true;
 
     //////////)/)/)/)/)/((//))//))/)/
 
     [NSLayoutConstraint constraintWithItem:resultPathField
-                                 attribute:NSLayoutAttributeTop
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:patchPathField
-                                 attribute:NSLayoutAttributeBottom
+                                attribute:NSLayoutAttributeTop
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:patchPathField
+                                attribute:NSLayoutAttributeBottom
                                 multiplier:1.0
-                                  constant:20]
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:resultPathField
-                                 attribute:NSLayoutAttributeHeight
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:nil
-                                 attribute:NSLayoutAttributeHeight
+                                attribute:NSLayoutAttributeHeight
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:nil
+                                attribute:NSLayoutAttributeHeight
                                 multiplier:0
-                                  constant:kDefH]
+                                constant:kDefH]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:resultPathField
-                                 attribute:NSLayoutAttributeLeading
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeLeading
+                                attribute:NSLayoutAttributeLeading
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeLeading
                                 multiplier:1.0
-                                  constant:20]
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:resultPathField
-                                 attribute:NSLayoutAttributeTrailing
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeTrailing
+                                attribute:NSLayoutAttributeTrailing
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeTrailing
                                 multiplier:1.0
-                                  constant:-20]
+                                constant:-20]
         .active = true;
 }
 
@@ -402,8 +408,8 @@ PatchFormat creationFormat;
 
     applyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [applyBtn addTarget:self
-                  action:@selector(handleApplyCreateButtonAction)
-        forControlEvents:UIControlEventTouchUpInside];
+                action:@selector(handleApplyCreateButtonAction)
+                forControlEvents:UIControlEventTouchUpInside];
     [applyBtn setTitle:@"Apply" forState:UIControlStateNormal];
     [applyBtn setTitleColor:kBgcolor forState:UIControlStateNormal];
     applyBtn.backgroundColor = kMelroseColor;
@@ -419,47 +425,47 @@ PatchFormat creationFormat;
     applyBtn.translatesAutoresizingMaskIntoConstraints = NO;
 
     [NSLayoutConstraint constraintWithItem:applyBtn
-                                 attribute:NSLayoutAttributeTop
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:resultPathField
-                                 attribute:NSLayoutAttributeBottom
+                                attribute:NSLayoutAttributeTop
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:resultPathField
+                                attribute:NSLayoutAttributeBottom
                                 multiplier:1.0
-                                  constant:30]
+                                constant:30]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:applyBtn
-                                 attribute:NSLayoutAttributeHeight
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:nil
-                                 attribute:NSLayoutAttributeHeight
+                                attribute:NSLayoutAttributeHeight
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:nil
+                                attribute:NSLayoutAttributeHeight
                                 multiplier:0
-                                  constant:40]
+                                constant:40]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:applyBtn
-                                 attribute:NSLayoutAttributeLeading
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeLeading
+                                attribute:NSLayoutAttributeLeading
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeLeading
                                 multiplier:1.0
-                                  constant:20]
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:applyBtn
-                                 attribute:NSLayoutAttributeTrailing
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeTrailing
+                                attribute:NSLayoutAttributeTrailing
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeTrailing
                                 multiplier:1.0
-                                  constant:-20]
+                                constant:-20]
         .active = true;
 
     //--------------------Patch Type Button -----------------------
 
     patchTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [patchTypeBtn addTarget:self
-                     action:@selector(showChangePatchTypeAlert)
-           forControlEvents:UIControlEventTouchUpInside];
+                    action:@selector(showChangePatchTypeAlert)
+                    forControlEvents:UIControlEventTouchUpInside];
 
     [patchTypeBtn setTitle:@"Patch Type: IPS" forState:UIControlStateNormal];
     [patchTypeBtn setTitleColor:kBgcolor forState:UIControlStateNormal];
@@ -475,39 +481,39 @@ PatchFormat creationFormat;
     patchTypeBtn.translatesAutoresizingMaskIntoConstraints = NO;
 
     [NSLayoutConstraint constraintWithItem:patchTypeBtn
-                                 attribute:NSLayoutAttributeTop
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:applyBtn
-                                 attribute:NSLayoutAttributeBottom
+                                attribute:NSLayoutAttributeTop
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:applyBtn
+                                attribute:NSLayoutAttributeBottom
                                 multiplier:1.0
-                                  constant:30]
+                                constant:30]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:patchTypeBtn
-                                 attribute:NSLayoutAttributeHeight
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:nil
-                                 attribute:NSLayoutAttributeHeight
+                                attribute:NSLayoutAttributeHeight
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:nil
+                                attribute:NSLayoutAttributeHeight
                                 multiplier:0
-                                  constant:40]
+                                constant:40]
+        .active = true;
+
+[NSLayoutConstraint constraintWithItem:patchTypeBtn
+                                attribute:NSLayoutAttributeLeading
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeLeading
+                                multiplier:1.0
+                                constant:20]
         .active = true;
 
     [NSLayoutConstraint constraintWithItem:patchTypeBtn
-                                 attribute:NSLayoutAttributeLeading
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeLeading
+                                attribute:NSLayoutAttributeTrailing
+                                relatedBy:NSLayoutRelationEqual
+                                toItem:self.view
+                                attribute:NSLayoutAttributeTrailing
                                 multiplier:1.0
-                                  constant:20]
-        .active = true;
-
-    [NSLayoutConstraint constraintWithItem:patchTypeBtn
-                                 attribute:NSLayoutAttributeTrailing
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:self.view
-                                 attribute:NSLayoutAttributeTrailing
-                                multiplier:1.0
-                                  constant:-20]
+                                constant:-20]
         .active = true;
     patchTypeBtn.hidden = Korra.isApplyPatchMode;
 }
@@ -691,8 +697,7 @@ PatchFormat creationFormat;
         return BPSPAT;
     } else if ([lowerPath hasSuffix:@".rup"]) {
         return RUPPAT;
-    } else if ([lowerPath hasSuffix:@".dat"] ||
-               [lowerPath hasSuffix:@"xdelta"] || [lowerPath hasSuffix:@"delta"]) {
+    } else if ([lowerPath hasSuffix:@".dat"] || [lowerPath hasSuffix:@"xdelta"] || [lowerPath hasSuffix:@"delta"]) {
         return XDELTAPAT;
     }
     return UNKNOWNPAT;
@@ -704,28 +709,28 @@ PatchFormat creationFormat;
     MPPatchResult *retval = nil;
     if (currentFormat == UPSPAT) {
         retval = [UPSAdapter ApplyPatch:patchPath
-                                 toFile:sourceFile
-                              andCreate:destFile];
+                            toFile:sourceFile
+                            andCreate:destFile];
     } else if (currentFormat == IPSPAT) {
         retval = [IPSAdapter ApplyPatch:patchPath
-                                 toFile:sourceFile
-                              andCreate:destFile];
+                            toFile:sourceFile
+                            andCreate:destFile];
     } else if (currentFormat == PPFPAT) {
         retval = [PPFAdapter ApplyPatch:patchPath
-                                 toFile:sourceFile
-                              andCreate:destFile];
+                            toFile:sourceFile
+                            andCreate:destFile];
     } else if (currentFormat == BPSPAT) {
         retval = [BPSAdapter ApplyPatch:patchPath
-                                 toFile:sourceFile
-                              andCreate:destFile];
+                            toFile:sourceFile
+                            andCreate:destFile];
     } else if (currentFormat == RUPPAT) {
         retval = [RUPAdapter ApplyPatch:patchPath
-                                 toFile:sourceFile
-                              andCreate:destFile];
+                            toFile:sourceFile
+                            andCreate:destFile];
     } else if (currentFormat == XDELTAPAT) {
         retval = [XDeltaAdapter ApplyPatch:patchPath
-                                    toFile:sourceFile
-                                 andCreate:destFile];
+                                toFile:sourceFile
+                                andCreate:destFile];
     }
     return retval;
 }

@@ -15,6 +15,7 @@ static NSString *CellIdentifier = @"Cell";
 @property (nonatomic, assign) BOOL inAppDir;
 @property (nonatomic, assign) NSString *appBundleID;
 @property (nonatomic, assign) BOOL allowDeletingFromApps;
+@property (nonatomic) CGRect popoverFrame;
 
 @end
 
@@ -252,7 +253,9 @@ static NSString *CellIdentifier = @"Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	NSURL *fileURL = dirCon[indexPath.row];
-	
+	//to get the frame of the cell and give it to the action sheet (looks doper + fixes a crash on the iPad)
+	self.popoverFrame = [tableView cellForRowAtIndexPath:indexPath].frame;
+
 	if (![fileManager fileExistsAtPath:fileURL.path isDirectory:nil]) {
 		[Korra alertWithTitle:@"Error" message:[NSString stringWithFormat:@"File doesn't exist"]];
 		return;
@@ -273,8 +276,8 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 
-#pragma mark -
-#pragma mark my methods
+
+#pragma mark - my methods
 - (void)buttonActions:(id)sender {
 
 	switch ([sender tag]) {
@@ -399,10 +402,13 @@ static NSString *CellIdentifier = @"Cell";
 						[self presentViewController:deleteAlert animated:YES completion:nil];
 					
 		}]];
-} // if not inApp
-
-// Present action sheet.
-[self presentViewController:actionSheet animated:YES completion:nil];
+	} 
+	//These two lines make sure the alert gets the necessary position info on the iPad
+	//otherwise it will CRASH on iPads
+	actionSheet.popoverPresentationController.sourceView = self.view;
+	actionSheet.popoverPresentationController.sourceRect = [self popoverFrame];
+	// Present action sheet.
+	[self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 
@@ -445,9 +451,9 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)startUIDocumentPickerForImport {
 	 UIDocumentPickerViewController *documentPicker = 
-	 	[[UIDocumentPickerViewController alloc] 
-		 initWithDocumentTypes:@[@"public.data"]
-         inMode:UIDocumentPickerModeImport];
+		[[UIDocumentPickerViewController alloc] 
+		initWithDocumentTypes:@[@"public.data"]
+        inMode:UIDocumentPickerModeImport];
     
 	documentPicker.delegate = self;
     documentPicker.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -455,18 +461,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 
-- (void)unselectRow
-{
-  NSIndexPath* selectedIndexPath = [self.tableView indexPathForSelectedRow];
-  if(selectedIndexPath)
-  {
-    [self.tableView deselectRowAtIndexPath:selectedIndexPath animated:YES];
-  }
-}
-
-
-- (void) dealloc
-{
+- (void) dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -549,5 +544,15 @@ static NSString *CellIdentifier = @"Cell";
 	[self reloadContent];
 }
 
+
+	#pragma mark - iPad specific code
+	//if no cell frame is provided, return the center of the screen as the position for the action sheet alert on iPads
+- (CGRect)popoverFrame {
+	if (CGRectIsEmpty(_popoverFrame)){
+		return CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0);
+	}else {
+		return _popoverFrame;
+	}
+}
 
 @end
