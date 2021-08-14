@@ -10,10 +10,8 @@ static NSString *CellIdentifier = @"Cell";
 
 @property (nonatomic, strong) NSURL *currentURL;
 @property (nonatomic, assign) BOOL exCall;
-@property (nonatomic, assign) BOOL forField;
 @property (nonatomic, assign) BOOL showHiddenFiles;
 @property (nonatomic, assign) BOOL inAppDir;
-@property (nonatomic, assign) NSString *appBundleID;
 @property (nonatomic, assign) BOOL allowDeletingFromApps;
 @property (nonatomic) CGRect popoverFrame;
 
@@ -43,26 +41,10 @@ static NSString *CellIdentifier = @"Cell";
 		if (self) {
 		
 		self.exCall = YES;
-		self.forField = NO;
 		self.currentURL = path;
 		self.title = [path lastPathComponent];
 		
 	}
-	return self;
-}
-- (instancetype)initWithPath:(NSURL *)path andBundleID:(NSString*)bid {
-	
-	self = [super initWithStyle:UITableViewStylePlain];
-	if (!self) return nil;
-	
-	self.exCall = YES;
-	self.forField = NO;
-	self.currentURL = path;
-	self.appBundleID = bid;
-	self.inAppDir = true;
-	
-	self.title = [path lastPathComponent];
-	
 	return self;
 }
 

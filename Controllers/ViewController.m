@@ -1,4 +1,5 @@
 #import "ViewController.h"
+#import "FMController.h"
 #import "../CC/txtField.h"
 #import "../MC/adapters/adapters.h"
 #import "../defs.h"
@@ -25,8 +26,13 @@ PatchFormat creationFormat;
 
 @interface ViewController ()
 
+@property (nonatomic, strong) txtField *romPathField;
+@property (nonatomic, strong) txtField *patchPathField;
+@property (nonatomic, strong) txtField *resultPathField;
+
 @property(nonatomic, strong) UIButton *applyBtn;
 @property(nonatomic, strong) UIButton *patchTypeBtn;
+
 @property(nonatomic, strong) UILabel *statusLabel;
 
 @end
@@ -45,9 +51,9 @@ PatchFormat creationFormat;
 
     Korra = [Avatar shared];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(setFileURL:)
-                                                 name:kSetFileNotification
-                                               object:nil];
+                                            selector:@selector(setFileURL:)
+                                            name:kSetFileNotification
+                                            object:nil];
     Korra.isApplyPatchMode = YES;
     creationFormat = IPSPAT;
     return self;
