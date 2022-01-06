@@ -703,7 +703,7 @@ PatchFormat creationFormat;
         return BPSPAT;
     } else if ([lowerPath hasSuffix:@".rup"]) {
         return RUPPAT;
-    } else if ([lowerPath hasSuffix:@".dat"] || [lowerPath hasSuffix:@"xdelta"] || [lowerPath hasSuffix:@"delta"]) {
+    } else if ([lowerPath hasSuffix:@".dat"] || [lowerPath hasSuffix:@".xdelta"] || [lowerPath hasSuffix:@".delta"] || [lowerPath hasSuffix:@".vcdiff"]) {
         return XDELTAPAT;
     }
     return UNKNOWNPAT;

@@ -87,10 +87,9 @@ static NSString *const themeKey = @"XPatcher.currentTheme";
 	@"delta",
 	@"dat",
 	@"xdelta",
+	@"vcdiff"
 	];
 	if ([supportedExtensions containsObject:ext]) return YES;
-	
-	
 	return NO;
 	
 }
@@ -104,18 +103,7 @@ static NSString *const themeKey = @"XPatcher.currentTheme";
 	NSData *jsonArrayData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"roms" ofType:@"json" inDirectory:@"extensions"]];
 	_romExtensions = [NSJSONSerialization JSONObjectWithData:jsonArrayData options:kNilOptions error:nil];
 	}
-	// NSArray *supportedExtensions = @[
-	// @"gba",
-	// @"gb",
-	// @"gbc",
-	// @"nes",
-	// @"smc",
-	// @"sfc",
-	// @"iso",
-	// @"ds",
-	// @"nds",
-	// @"n64"
-	// ];
+
 	if ([_romExtensions containsObject:ext]) return YES;
 	
 	
@@ -151,12 +139,6 @@ static NSString *const themeKey = @"XPatcher.currentTheme";
 
 
 - (BOOL)isSafeDirAtURL:(NSURL*)url {
-	/*
-	if (self.inAppDir) {
-		if (!self.allowDeletingFromApps) return NO;
-		return YES;
-	}*/
-	
 	if ([url.path rangeOfString:[self documentsDirectory].path options:NSCaseInsensitiveSearch].location != NSNotFound) {
 		return YES;
 	}
