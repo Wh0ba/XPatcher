@@ -14,6 +14,7 @@ $(APPLICATION_NAME)_FILES = $(wildcard *.m) \
 	 $(wildcard MC/libppf/*.cc) \
 	 $(wildcard MC/adapters/*.m*) \
 	 $(wildcard Controllers/*.m) \
+	 $(wildcard MC/AWFileHash/*.m) \
 	 MC/xdelta/xdelta3.c \
 	 CC/Toast/UIView+Toast.m \
 	 $(wildcard MC/adapters/librup/*.c) \

@@ -1,6 +1,7 @@
 #import "../shared.h"
 #import "../defs.h"
 #import "FMController.h"
+#import "../MC/AWFileHash/AWFileHash.h"
 
 
 static NSString *CellIdentifier = @"Cell";
@@ -273,9 +274,13 @@ static NSString *CellIdentifier = @"Cell";
 
 
 - (void)actionsForFileAtURL:(NSURL*)url {
+	NSString *md5_string = [AWFileHash md5HashOfFileAtPath:url.path];
+	NSString *sha1_string = [AWFileHash sha1HashOfFileAtPath:url.path];
+	NSString *crc32_string = [AWFileHash crc32HashOfFileAtPath:url.path];
 
+	NSString *alertTitle = [NSString stringWithFormat:@"%@\nSHA1:%@\nCRC32:%@\nMD5:%@", url.lastPathComponent, sha1_string, crc32_string, md5_string];
 	UIAlertController *actionSheet = [UIAlertController 
-		alertControllerWithTitle:url.lastPathComponent 
+		alertControllerWithTitle:alertTitle
 		message:nil 
 		preferredStyle:UIAlertControllerStyleActionSheet];
 
