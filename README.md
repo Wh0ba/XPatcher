@@ -10,13 +10,13 @@ Full info about Licenses can be found under [Resources/licenses/Licenses.txt](Re
 
 ### About the project
 
-The app itself is written in pure Objective-C because it's the best (⌐■_■)
+The app itself is written in pure Objective-C (⌐■_■)       
 While the libraries are a mixer of C and C++
 
-I started this project when i was 17 and kinda dumped it because I was bored at that time
-But i finally decided to finish it 3 years later (I'm soon to be 20 while writing thisヾ(•ω•`)o )
+I started this project when i was 17 and kinda dumped it because I was bored at that time     
+But i finally decided to finish it in 2020 ヾ(•ω•`)o 
 
-Most of the code I had to write on my IPhone that's way it's really messy , I mostly memerized the methods and function calls and sometimes used the offical documentaion, Since there was no auto-complete or anything like that.
+Most of the code I had to be written on my IPhone, that's why it's really messy , I mostly memerized the methods and function calls and sometimes used the offical documentaion, Since there was no auto-complete or anything like that.
 
 ## Compiling 
 
@@ -29,4 +29,4 @@ Simply put the script in the packages folder and then run `./deb2ipa.sh` from wi
 This will result in a .ipa archive in packages/ipa/ folder which you can side load and install to your iOS Device (Using AltStore or other signing services)
 
 
-AbdulWahab Fanar - (@Wh0ba 2017-2020©)
+AbdulWahab Fanar - (@Wh0ba 2017-2022©)
